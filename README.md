@@ -9,7 +9,7 @@
 <p align="center">Phoenix is an open-source game launcher for macOS, written in SwiftUI. 
   This launcher was inspired by projects like <a href="https://playnite.link" target="_blank">Playnite</a> and <a href="https://lutris.net" target="_blank">Lutris</a>, and supports any game which can be launched from the command line. (So basically     all of them!) 
   It was designed to be small, fast, and not overly complicated. 
-  Phoenix is available on GitHub under the <a href="License.txt" target="_blank">MIT license</a>
+  Phoenix is available on GitHub under the <a href="License.txt" target="_blank">MIT license</a>.
 </p>
 
 <img src="Readme Images/phoenixdark.webp" alt="Screenshot of the app"/>
