@@ -8,7 +8,7 @@
 
 <p align="center">Phoenix is an open-source game launcher for macOS, written in SwiftUI. This launcher was inspired by projects like <a href="https://playnite.link" target="_blank">Playnite</a> and <a href="https://lutris.net" target="_blank">Lutris</a>, and supports any game which can be launched from the command line. (So basically all of them!) It was designed to be small, fast, and not overly complicated. Phoenix is available on GitHub under the <a href="License.txt" target="_blank">MIT license</a></p>
 
-<img src="Readme Images/phoenixlight.webp" alt="Screenshot of the app"/>
+<img src="Readme Images/phoenixdark.webp" alt="Screenshot of the app"/>
 
 ## Usage
 
@@ -16,7 +16,14 @@ To run this launcher, your Mac must be on at least macOS 13.0 (Ventura).
 
 Download the [latest release](https://github.com/Shock9616/Phoenix/releases) from the releases page and install the app like you would with any other. The first time you open the app, you will get an alert saying that your Mac can't check the app for malicious software. This is because I'm a broke university student who can't afford an Apple Developer Program membership. Open up the app anyways :)
 
-You can add a game by clicking the '+' button in the toolbar. Fill in as much information as you can. To run the game, you need at the VERY least a name and a launcher command. All the other things are for making the launcher look nicer. Once you've added a game you can delete the placeholder game by right-clicking and selecting 'Delete Game'. You can edit a game you've already added by clicking the pencil button next to the play button. 
+Wen you first open the app, it'll look something like this:
+<img src="Readme Images/phoenixplaceholder.webp" alt="Screenshot of the app"/>
+
+
+You can add a game by clicking the '+' button in the toolbar. Fill in as much information as you can. It should look something like this after that:
+<img src="Readme Images/phoenixnms.webp" alt="Screenshot of the app"/>
+
+To run the game, you need at the VERY least a name and a launcher command. All the other things are for making the launcher look nicer. Once you've added a game you can delete the placeholder game by right-clicking and selecting 'Delete Game'. You can edit a game you've already added by clicking the pencil button next to the play button. 
 
 Once you have a game and it's launcher command is configured, you can hit the play button and it will open up!
 
