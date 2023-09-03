@@ -214,10 +214,13 @@ struct GameDetailView: View {
         }
         .navigationTitle(selectedGame ?? "Phoenix")
         .onAppear {
+            // Usage
             refreshGameDetailView()
             if selectedGame == nil {
                 selectedGame = games[0].name
             }
+            let fetcher = FetchGameData()
+            fetcher.searchGameByName(name: selectedGame ?? "")
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
                 refreshGameDetailView()
                 refresh.toggle()
@@ -235,6 +238,10 @@ struct GameDetailView: View {
                 let game = games[idx!]
                 playGame(game: game)
             }
+        }
+        .onChange(of: selectedGame) { newValue in
+            let fetcher = FetchGameData()
+            fetcher.searchGameByName(name: selectedGame ?? "")
         }
     }
     
