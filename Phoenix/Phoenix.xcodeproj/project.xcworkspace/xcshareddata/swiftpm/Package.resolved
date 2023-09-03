@@ -1,12 +1,39 @@
 {
   "pins" : [
     {
+      "identity" : "igdb-swift-api",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/husnjak/IGDB-SWIFT-API.git",
+      "state" : {
+        "revision" : "1b2c8cb44b4f978f18edeb8dcd613adbe8acc3d1",
+        "version" : "0.4.2"
+      }
+    },
+    {
+      "identity" : "just",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/dduan/Just.git",
+      "state" : {
+        "revision" : "1824bf84cf52d11d69ae20cfb89f0ce5bffa5650",
+        "version" : "0.8.0"
+      }
+    },
+    {
       "identity" : "sparkle",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sparkle-project/Sparkle",
       "state" : {
         "revision" : "87e4fcbac39912f9cdb9a9acf205cad60e1ca3bc",
         "version" : "2.4.2"
+      }
+    },
+    {
+      "identity" : "swift-protobuf",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-protobuf.git",
+      "state" : {
+        "revision" : "cf62cdaea48b77f1a631e5cb3aeda6047c2cba1d",
+        "version" : "1.23.0"
       }
     }
   ],
