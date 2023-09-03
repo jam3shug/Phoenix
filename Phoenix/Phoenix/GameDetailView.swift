@@ -232,14 +232,12 @@ struct GameDetailView: View {
             timer?.invalidate()
             timer = nil
         }
-        .onChange(of: playingGame) { newValue in
-            if newValue {
-                let idx = games.firstIndex(where: { $0.name == selectedGame })
-                let game = games[idx!]
-                playGame(game: game)
-            }
+        .onChange(of: playingGame) { _ in
+            let idx = games.firstIndex(where: { $0.name == selectedGame })
+            let game = games[idx!]
+            playGame(game: game)
         }
-        .onChange(of: selectedGame) { newValue in
+        .onChange(of: selectedGame) { _ in
             let fetcher = FetchGameData()
             fetcher.searchGameByName(name: selectedGame ?? "")
         }
