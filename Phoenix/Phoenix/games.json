@@ -2,6 +2,7 @@
   "games": [
     {
       "steamID": "",
+      "igdbID": "",
       "launcher": "",
       "metadata": {
         "rating": "",

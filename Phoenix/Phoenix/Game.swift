@@ -65,6 +65,7 @@ enum Recency: String, Codable, CaseIterable, Identifiable {
 
 struct Game: Codable, Comparable, Hashable {
     var steamID: String
+    var igdbID: String
     var launcher: String
     var metadata: [String: String]
     var icon: String
@@ -77,6 +78,7 @@ struct Game: Codable, Comparable, Hashable {
 
     init(
         steamID: String = "",
+        igdbID: String = "",
         launcher: String = "",
         metadata: [String: String] = [
             "rating": "",
@@ -97,6 +99,7 @@ struct Game: Codable, Comparable, Hashable {
         is_favorite: Bool
     ) {
         self.steamID = steamID
+        self.igdbID = igdbID
         self.launcher = launcher
         self.metadata = metadata
         self.icon = icon
@@ -109,7 +112,7 @@ struct Game: Codable, Comparable, Hashable {
     }
     
     enum CodingKeys: String, CodingKey {
-        case steamID, launcher, metadata, icon, name, platform, status, recency, is_deleted, is_favorite
+        case steamID, igdbID, launcher, metadata, icon, name, platform, status, recency, is_deleted, is_favorite
     }
         
     init(from decoder: Decoder) throws {
@@ -119,7 +122,6 @@ struct Game: Codable, Comparable, Hashable {
         icon = try container.decode(String.self, forKey: .icon)
         name = try container.decode(String.self, forKey: .name)
         
-        // If game platform was .EMUL change to .none
         var platformRawValue = try container.decode(String.self, forKey: .platform)
         platformRawValue = platformRawValue.lowercased()
         
@@ -169,6 +171,13 @@ struct Game: Codable, Comparable, Hashable {
             self.steamID = steamID
         } else {
             self.steamID = ""
+        }
+        
+        // Handle igdbID conversion with default to ""
+        if let igdbID = try? container.decode(String.self, forKey: .igdbID) {
+            self.igdbID = igdbID
+        } else {
+            self.igdbID = ""
         }
         
         // Handle is_deleted conversion with default to ""

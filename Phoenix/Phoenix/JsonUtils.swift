@@ -103,6 +103,7 @@ func detectSteamGamesAndWriteToJSON() {
                 let steamID = manifestDictionary["steamID"]
                 let game = Game(
                     steamID: steamID ?? "Unknown",
+                    igdbID: "",
                     launcher: "open steam://run/\(steamID ?? "Unknown")",
                     metadata: [
                         "rating": "",
