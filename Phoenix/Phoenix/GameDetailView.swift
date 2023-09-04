@@ -105,6 +105,22 @@ struct GameDetailView: View {
                             .frame(width: 50, height: 50)
                             .background(settingsColor)
                             .cornerRadius(10)
+                            Button(
+                                action: {
+                                    let fetcher = FetchGameData()
+                                    fetcher.searchGameByName(name: selectedGame ?? "")
+                                },
+                                label: {
+                                    Image(systemName: "arrow.down.circle")
+                                        .fontWeight(.medium)
+                                        .foregroundColor(settingsText)
+                                        .font(.system(size: 27))
+                                }
+                            )
+                            .buttonStyle(.plain)
+                            .frame(width: 50, height: 50)
+                            .background(settingsColor)
+                            .cornerRadius(10)
                         } // hstack
                         .frame(alignment: .leading)
 
@@ -219,8 +235,6 @@ struct GameDetailView: View {
             if selectedGame == nil {
                 selectedGame = games[0].name
             }
-            let fetcher = FetchGameData()
-            fetcher.searchGameByName(name: selectedGame ?? "")
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
                 refreshGameDetailView()
                 refresh.toggle()
@@ -236,10 +250,6 @@ struct GameDetailView: View {
             let idx = games.firstIndex(where: { $0.name == selectedGame })
             let game = games[idx!]
             playGame(game: game)
-        }
-        .onChange(of: selectedGame) { _ in
-            let fetcher = FetchGameData()
-            fetcher.searchGameByName(name: selectedGame ?? "")
         }
     }
     
