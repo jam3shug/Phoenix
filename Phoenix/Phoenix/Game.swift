@@ -64,7 +64,7 @@ enum Recency: String, Codable, CaseIterable, Identifiable {
 }
 
 struct Game: Codable, Comparable, Hashable {
-    var appID: String
+    var steamID: String
     var launcher: String
     var metadata: [String: String]
     var icon: String
@@ -76,7 +76,7 @@ struct Game: Codable, Comparable, Hashable {
     var is_favorite: Bool
 
     init(
-        appID: String = "",
+        steamID: String = "",
         launcher: String = "",
         metadata: [String: String] = [
             "rating": "",
@@ -96,7 +96,7 @@ struct Game: Codable, Comparable, Hashable {
         is_deleted: Bool,
         is_favorite: Bool
     ) {
-        self.appID = appID
+        self.steamID = steamID
         self.launcher = launcher
         self.metadata = metadata
         self.icon = icon
@@ -109,7 +109,7 @@ struct Game: Codable, Comparable, Hashable {
     }
     
     enum CodingKeys: String, CodingKey {
-        case appID, launcher, metadata, icon, name, platform, status, recency, is_deleted, is_favorite
+        case steamID, launcher, metadata, icon, name, platform, status, recency, is_deleted, is_favorite
     }
         
     init(from decoder: Decoder) throws {
@@ -164,11 +164,11 @@ struct Game: Codable, Comparable, Hashable {
             }
         }
         
-        // Handle appID conversion with default to ""
-        if let appID = try? container.decode(String.self, forKey: .appID) {
-            self.appID = appID
+        // Handle steamID conversion with default to ""
+        if let steamID = try? container.decode(String.self, forKey: .steamID) {
+            self.steamID = steamID
         } else {
-            self.appID = ""
+            self.steamID = ""
         }
         
         // Handle is_deleted conversion with default to ""
