@@ -171,14 +171,14 @@ struct Game: Codable, Comparable, Hashable {
             self.appID = ""
         }
         
-        // Handle appID conversion with default to ""
+        // Handle is_deleted conversion with default to ""
         if let is_deleted = try? container.decode(Bool.self, forKey: .is_deleted) {
             self.is_deleted = is_deleted
         } else {
             self.is_deleted = false
         }
         
-        // Handle appID conversion with default to ""
+        // Handle is_favorite conversion with default to ""
         if let is_favorite = try? container.decode(Bool.self, forKey: .is_favorite) {
             self.is_favorite = is_favorite
         } else {
