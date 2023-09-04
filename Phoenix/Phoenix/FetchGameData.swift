@@ -30,27 +30,76 @@ struct FetchGameData {
                 name: game.name,
                 platform: game.platform,
                 status: game.status,
+                recency: game.recency,
                 is_deleted: game.is_deleted,
                 is_favorite: game.is_favorite
             )
-        }
-        // Create an APICalypse query to specify the search query and fields.
-        if name != "" {
-            let apicalypse = APICalypse()
-                .fields(fields: "id,name,artworks.image_id,artworks.height,description") // Specify the fields you want to retrieve
-                .where(query: "name ~ *\"\(name)\"*") // Use the "where" clause to search by name
-                .limit(value: 50)
+            // Create an APICalypse query to specify the search query and fields.
+            if name != "" {
+                let apicalypse = APICalypse()
+                    .fields(fields: "id,name,artworks.image_id,artworks.height,summary,genres.name,themes.name") // Specify the fields you want to retrieve
+                    .where(query: "name ~ *\"\(name)\"*") // Use the "where" clause to search by name
+                    .limit(value: 50)
 
-            // Make the API request to search for the game by name.
-            wrapper.games(apiCalypse: apicalypse, result: { games in
-                // Handle the retrieved games here
-                if let lowestIdGame = games.min(by: { $0.id < $1.id }) {
-                    
+                // Make the API request to search for the game by name.
+                wrapper.games(apiCalypse: apicalypse, result: { fetchedGames in
+                    // Handle the retrieved games here
+                    if let lowestIDGame = fetchedGames.min(by: { $0.id < $1.id }) {
+                        
+                        // Combine genres (excluding "Science Fiction")
+                        var uniqueGenres = Set<String>()
+                        var combinedCount = 0
+                        for genre in lowestIDGame.genres {
+                            if !genre.name.isEmpty && genre.name != "Science Fiction" {
+                                uniqueGenres.insert(genre.name)
+                                combinedCount += 1
+                            }
+                            
+                            if combinedCount >= 3 {
+                                break
+                            }
+                        }
+                        // Combine themes (excluding "Science Fiction")
+                        for theme in lowestIDGame.themes {
+                            if !theme.name.isEmpty && theme.name != "Science Fiction" {
+                                uniqueGenres.insert(theme.name)
+                                combinedCount += 1
+                            }
+                            
+                            if combinedCount >= 3 {
+                                break
+                            }
+                        }
+                        // Convert the set to a sorted array
+                        let combinedGenresString = uniqueGenres.sorted().joined(separator: "\n")
+                        fetchedGame.metadata["genre"] = combinedGenresString
+
+                        print(lowestIDGame.summary)
+                        
+                        let idx = games.firstIndex(where: { $0.name == name })
+                        games[idx!] = fetchedGame
+                        
+                        let encoder = JSONEncoder()
+                        encoder.outputFormatting = .prettyPrinted
+
+                        do {
+                            let gamesJSON = try JSONEncoder().encode(games)
+
+                            if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
+                                // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
+                                gamesJSONString = "{\"games\": \(gamesJSONString)}"
+                                writeGamesToJSON(data: gamesJSONString)
+                            }
+                        } catch {
+                            logger.write(error.localizedDescription)
+                        }
+                    }
+                }) { error in
+                    // Handle any errors that occur during the request
+                    print("Error searching for the game: \(error)")
                 }
-            }) { error in
-                // Handle any errors that occur during the request
-                print("Error searching for the game: \(error)")
             }
+
         }
     }
 }

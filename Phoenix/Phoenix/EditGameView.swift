@@ -314,6 +314,7 @@ struct EditGameView: View {
                             name: nameInput,
                             platform: platInput,
                             status: statusInput,
+                            recency: currentGame.recency,
                             is_deleted: currentGame.is_deleted,
                             is_favorite: currentGame.is_favorite
                         )
