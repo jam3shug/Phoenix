@@ -115,10 +115,14 @@ struct GameDetailView: View {
                                         .fontWeight(.medium)
                                         .foregroundColor(settingsText)
                                         .font(.system(size: 27))
+                                    Text(" Fetch")
+                                        .fontWeight(.medium)
+                                        .foregroundColor(settingsText)
+                                        .font(.system(size: 25))
                                 }
                             )
                             .buttonStyle(.plain)
-                            .frame(width: 50, height: 50)
+                            .frame(width: 175, height: 50)
                             .background(settingsColor)
                             .cornerRadius(10)
                         } // hstack
