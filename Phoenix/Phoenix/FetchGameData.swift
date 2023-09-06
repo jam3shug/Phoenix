@@ -20,6 +20,7 @@ struct FetchGameData {
                 metadata: [
                     "description": game.metadata["description"] ?? "",
                     "header_img": game.metadata["header_img"] ?? "",
+                    "last_played": game.metadata["last_played"] ?? "Never",
                     "rating": game.metadata["rating"] ?? "",
                     "genre": game.metadata["genre"] ?? "",
                     "developer": game.metadata["developer"] ?? "",
