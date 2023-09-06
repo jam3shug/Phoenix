@@ -64,6 +64,50 @@ struct FetchGameData {
                         } else {
                             fetchedGame.metadata["description"] = lowestIDGame.storyline
                         }
+
+                        // Get the highest resolution artwork
+                        // TODO: Add 2x retina support
+                        if lowestIDGame.artworks.count > 0 {
+                            if let highestResArtwork = lowestIDGame.artworks.max(by: { $0.height < $1.height }) {
+                                let imageURL = imageBuilder(imageID: highestResArtwork.imageID, size: .FHD, imageType: .PNG)
+                                if let url = URL(string: imageURL) {
+                                    URLSession.shared.dataTask(with: url) { headerData, response, error in
+                                        let fileManager = FileManager.default
+                                        guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
+                                            fatalError("Unable to retrieve application support directory URL")
+                                        }
+                                        
+                                        let cachedImagesDirectoryPath = appSupportURL.appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
+                                        
+                                        if !fileManager.fileExists(atPath: cachedImagesDirectoryPath.path) {
+                                            do {
+                                                try fileManager.createDirectory(at: cachedImagesDirectoryPath, withIntermediateDirectories: true, attributes: nil)
+                                                print("Created 'Phoenix/cachedImages' directory")
+                                            } catch {
+                                                fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
+                                            }
+                                        }
+                                        
+                                        var destinationURL: URL
+                                        
+                                        if url.pathExtension.lowercased() == "jpg" || url.pathExtension.lowercased() == "jpeg" {
+                                            destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_header.jpg")
+                                        } else {
+                                            destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_header.png")
+                                        }
+                                        
+                                        do {
+                                            try headerData?.write(to: destinationURL)
+                                            fetchedGame.metadata["header_img"] = destinationURL.relativeString
+                                            print("Saved image to: \(destinationURL.path)")
+                                        } catch {
+                                            print("Failed to save image: \(error.localizedDescription)")
+                                        }
+                                    }
+                                }
+                            }
+                            
+                        }
                         
                         // Combine genres (excluding "Science Fiction")
                         var uniqueGenres = Set<String>()
