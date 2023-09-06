@@ -69,8 +69,12 @@ struct FetchGameData {
                         var uniqueGenres = Set<String>()
                         var combinedCount = 0
                         for genre in lowestIDGame.genres {
-                            if !genre.name.isEmpty && genre.name.lowercased() != "Science Fiction".lowercased() {
-                                uniqueGenres.insert(genre.name)
+                            if !genre.name.isEmpty {
+                                if genre.name.lowercased() == "Science Fiction".lowercased() {
+                                    uniqueGenres.insert("Sci-fi")
+                                } else {
+                                    uniqueGenres.insert(genre.name)
+                                }
                                 combinedCount += 1
                             }
                             
@@ -80,9 +84,13 @@ struct FetchGameData {
                         }
                         // Combine themes (excluding "Science Fiction")
                         for theme in lowestIDGame.themes {
-                            if !theme.name.isEmpty && theme.name.lowercased() != "Science Fiction".lowercased() {
-                                uniqueGenres.insert(theme.name)
-                                combinedCount += 1
+                            if !theme.name.isEmpty {
+                                if theme.name.lowercased() == "Science Fiction".lowercased() {
+                                    uniqueGenres.insert("Sci-fi")
+                                } else {
+                                    uniqueGenres.insert(theme.name)
+                                    combinedCount += 1
+                                }
                             }
                             
                             if combinedCount >= 3 {
@@ -94,22 +102,26 @@ struct FetchGameData {
                         fetchedGame.metadata["genre"] = combinedGenresString
 
                         var developers = ""
+                        var devCount = 0
                         var publishers = ""
+                        var pubCount = 0
 
                         for company in lowestIDGame.involvedCompanies {
-                            if company.publisher {
+                            if company.publisher && pubCount <= 1 {
                                 let publisherName = company.company.name
                                 if !publishers.isEmpty {
                                     publishers += "\n"
                                 }
                                 publishers += publisherName
+                                pubCount += 1
                             }
-                            if company.developer {
+                            if company.developer && devCount <= 1 {
                                 let developerName = company.company.name
                                 if !developers.isEmpty {
                                     developers += "\n"
                                 }
                                 developers += developerName
+                                devCount += 1
                             }
                         }
                         
