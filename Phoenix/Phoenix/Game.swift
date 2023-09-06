@@ -8,7 +8,7 @@
 import Foundation
 
 enum Platform: String, Codable, CaseIterable, Identifiable {
-    case mac, steam, gog, epic, pc, ps, nin, xbox, none
+    case mac, steam, gog, epic, pc, ps, nin, sega, xbox, none
 
     var id: Platform { self }
 
@@ -21,6 +21,7 @@ enum Platform: String, Codable, CaseIterable, Identifiable {
         case .pc: return "PC"
         case .ps: return "Playstation"
         case .nin: return "Nintendo"
+        case .sega: return "Sega"
         case .xbox: return "Xbox"
         case .none: return "Other"
         }

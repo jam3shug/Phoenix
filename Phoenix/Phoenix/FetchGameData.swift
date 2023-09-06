@@ -69,7 +69,7 @@ struct FetchGameData {
                         var uniqueGenres = Set<String>()
                         var combinedCount = 0
                         for genre in lowestIDGame.genres {
-                            if !genre.name.isEmpty && genre.name != "Science Fiction" {
+                            if !genre.name.isEmpty && genre.name.lowercased() != "Science Fiction".lowercased() {
                                 uniqueGenres.insert(genre.name)
                                 combinedCount += 1
                             }
@@ -80,7 +80,7 @@ struct FetchGameData {
                         }
                         // Combine themes (excluding "Science Fiction")
                         for theme in lowestIDGame.themes {
-                            if !theme.name.isEmpty && theme.name != "Science Fiction" {
+                            if !theme.name.isEmpty && theme.name.lowercased() != "Science Fiction".lowercased() {
                                 uniqueGenres.insert(theme.name)
                                 combinedCount += 1
                             }
