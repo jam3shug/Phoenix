@@ -15,6 +15,8 @@ struct FetchGameData {
         if let idx = games.firstIndex(where: { $0.name == name }) {
             let game = games[idx]
             
+            var pullingImage = false
+            
             var fetchedGame: Game = .init(
                 launcher: game.launcher,
                 metadata: [
@@ -41,6 +43,7 @@ struct FetchGameData {
                     .fields(fields: """
                                     id,
                                     name,
+                                    artworks,
                                     artworks.image_id,
                                     artworks.height,
                                     storyline,
@@ -67,46 +70,70 @@ struct FetchGameData {
 
                         // Get the highest resolution artwork
                         // TODO: Add 2x retina support
-                        if lowestIDGame.artworks.count > 0 {
-                            if let highestResArtwork = lowestIDGame.artworks.max(by: { $0.height < $1.height }) {
-                                let imageURL = imageBuilder(imageID: highestResArtwork.imageID, size: .FHD, imageType: .PNG)
-                                if let url = URL(string: imageURL) {
-                                    URLSession.shared.dataTask(with: url) { headerData, response, error in
-                                        let fileManager = FileManager.default
-                                        guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
-                                            fatalError("Unable to retrieve application support directory URL")
-                                        }
-                                        
-                                        let cachedImagesDirectoryPath = appSupportURL.appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
-                                        
-                                        if !fileManager.fileExists(atPath: cachedImagesDirectoryPath.path) {
-                                            do {
-                                                try fileManager.createDirectory(at: cachedImagesDirectoryPath, withIntermediateDirectories: true, attributes: nil)
-                                                print("Created 'Phoenix/cachedImages' directory")
-                                            } catch {
-                                                fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
-                                            }
-                                        }
-                                        
-                                        var destinationURL: URL
-                                        
-                                        if url.pathExtension.lowercased() == "jpg" || url.pathExtension.lowercased() == "jpeg" {
-                                            destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_header.jpg")
-                                        } else {
-                                            destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_header.png")
-                                        }
-                                        
+                        print("Fetching artworks: ", lowestIDGame.artworks)
+                        if let highestResArtwork = lowestIDGame.artworks.max(by: { $0.height < $1.height }) {
+                            print("hgh res art: ", highestResArtwork)
+                            let imageURL = imageBuilder(imageID: highestResArtwork.imageID, size: .FHD, imageType: .PNG)
+                            if let url = URL(string: imageURL) {
+                                print(imageURL, url)
+                                URLSession.shared.dataTask(with: url) { headerData, response, error in
+                                    pullingImage = true
+                                    if let error = error {
+                                        print("Failed to fetch image: \(error.localizedDescription)")
+                                        // Handle the error (e.g., show an error message to the user)
+                                        return
+                                    }
+                                    let fileManager = FileManager.default
+                                    guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
+                                        fatalError("Unable to retrieve application support directory URL")
+                                    }
+                                    
+                                    let cachedImagesDirectoryPath = appSupportURL.appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
+                                    
+                                    if !fileManager.fileExists(atPath: cachedImagesDirectoryPath.path) {
                                         do {
-                                            try headerData?.write(to: destinationURL)
-                                            fetchedGame.metadata["header_img"] = destinationURL.relativeString
-                                            print("Saved image to: \(destinationURL.path)")
+                                            try fileManager.createDirectory(at: cachedImagesDirectoryPath, withIntermediateDirectories: true, attributes: nil)
+                                            print("Created 'Phoenix/cachedImages' directory")
                                         } catch {
-                                            print("Failed to save image: \(error.localizedDescription)")
+                                            fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
                                         }
                                     }
-                                }
+                                    
+                                    var destinationURL: URL
+                                    
+                                    if url.pathExtension.lowercased() == "jpg" || url.pathExtension.lowercased() == "jpeg" {
+                                        destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_header.jpg")
+                                    } else {
+                                        destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_header.png")
+                                    }
+                                    
+                                    do {
+                                        try headerData?.write(to: destinationURL)
+                                        fetchedGame.metadata["header_img"] = destinationURL.relativeString
+                                        print("Saved image to: \(destinationURL.path)")
+                                        
+                                        let idx = games.firstIndex(where: { $0.name == name })
+                                        games[idx!] = fetchedGame
+                                        
+                                        let encoder = JSONEncoder()
+                                        encoder.outputFormatting = .prettyPrinted
+                                        
+                                        do {
+                                            let gamesJSON = try JSONEncoder().encode(games)
+                                            
+                                            if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
+                                                // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
+                                                gamesJSONString = "{\"games\": \(gamesJSONString)}"
+                                                writeGamesToJSON(data: gamesJSONString)
+                                            }
+                                        } catch {
+                                            logger.write(error.localizedDescription)
+                                        }
+                                    } catch {
+                                        print("Failed to save image: \(error.localizedDescription)")
+                                    }
+                                }.resume()
                             }
-                            
                         }
                         
                         // Combine genres (excluding "Science Fiction")
@@ -185,25 +212,6 @@ struct FetchGameData {
                         dateFormatter.dateFormat = "MMMM dd, yyyy"
 
                         fetchedGame.metadata["release_date"] = dateFormatter.string(from: date)
-                        
-                        
-                        let idx = games.firstIndex(where: { $0.name == name })
-                        games[idx!] = fetchedGame
-                        
-                        let encoder = JSONEncoder()
-                        encoder.outputFormatting = .prettyPrinted
-
-                        do {
-                            let gamesJSON = try JSONEncoder().encode(games)
-
-                            if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
-                                // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
-                                gamesJSONString = "{\"games\": \(gamesJSONString)}"
-                                writeGamesToJSON(data: gamesJSONString)
-                            }
-                        } catch {
-                            logger.write(error.localizedDescription)
-                        }
                     }
                 }) { error in
                     // Handle any errors that occur during the request

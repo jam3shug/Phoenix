@@ -35,7 +35,7 @@ struct GameDetailView: View {
                     let game = games[idx]
 
                     // create header image
-                    Image(nsImage: loadImageFromFile(filePath: game.metadata["header_img"]!))
+                    Image(nsImage: loadImageFromFile(filePath: (game.metadata["header_img"]?.replacingOccurrences(of: "\\", with: ":"))!))
                         .resizable()
                         .scaledToFill()
                         .frame(

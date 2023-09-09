@@ -688,8 +688,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/husnjak/IGDB-SWIFT-API";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.4.2;
+				branch = "apicalpse-query-parser";
+				kind = branch;
 			};
 		};
 		CAFACC742A42638E001C45C4 /* XCRemoteSwiftPackageReference "Sparkle" */ = {

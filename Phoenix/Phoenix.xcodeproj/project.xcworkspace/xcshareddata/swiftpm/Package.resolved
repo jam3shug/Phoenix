@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/husnjak/IGDB-SWIFT-API",
       "state" : {
-        "revision" : "1b2c8cb44b4f978f18edeb8dcd613adbe8acc3d1",
-        "version" : "0.4.2"
+        "branch" : "apicalpse-query-parser",
+        "revision" : "4c1db74952e4b4f75e1b78c66d1331fb0359cae7"
       }
     },
     {
