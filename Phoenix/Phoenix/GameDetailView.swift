@@ -108,7 +108,7 @@ struct GameDetailView: View {
                             Button(
                                 action: {
                                     let fetcher = FetchGameData()
-                                    fetcher.searchGameByName(name: selectedGame ?? "")
+                                    fetcher.getGameMetadata(name: selectedGame ?? "")
                                 },
                                 label: {
                                     Image(systemName: "arrow.down.circle")

@@ -6,12 +6,13 @@
 //
 
 import Foundation
+import SwiftUI
 import IGDB_SWIFT_API
 
 struct FetchGameData {
     let wrapper: IGDBWrapper = IGDBWrapper(clientID: "aqxuk3zeqtcuquwswjrbohyi2mf5gc", accessToken: "go5xcl37bz41a16plvnudbe6a4fajt")
     
-    func searchGameByName(name: String) {
+    func getGameMetadata(name: String) {
         if let idx = games.firstIndex(where: { $0.name == name }) {
             let game = games[idx]
             
@@ -93,7 +94,6 @@ struct FetchGameData {
                                     logger.write("Invalid URL format.")
                                 }
                             }
-                            saveGame(name: name, fetchedGame: fetchedGame)
                         }
                         
                         // Combine genres (excluding "Science Fiction")
@@ -296,3 +296,12 @@ struct FetchGameData {
        }
     }
 }
+
+struct ChooseGameView: View {
+    var body: some View {
+        List {
+            
+        }
+    }
+}
+
