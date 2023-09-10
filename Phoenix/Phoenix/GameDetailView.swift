@@ -105,26 +105,6 @@ struct GameDetailView: View {
                             .frame(width: 50, height: 50)
                             .background(settingsColor)
                             .cornerRadius(10)
-                            Button(
-                                action: {
-                                    let fetcher = FetchGameData()
-                                    fetcher.getGameMetadata(name: selectedGame ?? "")
-                                },
-                                label: {
-                                    Image(systemName: "arrow.down.circle")
-                                        .fontWeight(.medium)
-                                        .foregroundColor(settingsText)
-                                        .font(.system(size: 27))
-                                    Text(" Fetch")
-                                        .fontWeight(.medium)
-                                        .foregroundColor(settingsText)
-                                        .font(.system(size: 25))
-                                }
-                            )
-                            .buttonStyle(.plain)
-                            .frame(width: 175, height: 50)
-                            .background(settingsColor)
-                            .cornerRadius(10)
                         } // hstack
                         .frame(alignment: .leading)
 
