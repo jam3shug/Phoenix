@@ -62,17 +62,17 @@ struct FetchGameData {
                 // Make the API request to search for the game by name.
                 wrapper.games(apiCalypse: apicalypse, result: { fetchedGames in
                     var gamesWithName: [Proto_Game] = []
-//                    // Handle the retrieved games here
-//                    for i in fetchedGames {
-//                        if i.name == name {
-//                            gamesWithName.append(i)
-//                        }
-//                    }
-//                    if gamesWithName.count > 1 {
-//                        return gamesWithName
-//                    } else {
+                    // Handle the retrieved games here
+                    for i in fetchedGames {
+                        if i.name == name {
+                            gamesWithName.append(i)
+                        }
+                    }
+                    if gamesWithName.count == 0 {
+                        gamesWithName = fetchedGames
+                    }
                         if let lowestIDGame = fetchedGames.min(by: { $0.id < $1.id }) {
-                            fetchedGame.metadata["igdbID"] = String(lowestIDGame.id)
+                            fetchedGame.igdbID = String(lowestIDGame.id)
                             
                             if lowestIDGame.storyline == "" || lowestIDGame.storyline.count > 1500 {
                                 fetchedGame.metadata["description"] = lowestIDGame.summary
@@ -86,6 +86,7 @@ struct FetchGameData {
                                     // Split the URL string by forward slash and get the last component
                                     if let lastPathComponent = website.url.split(separator: "/").last {
                                         if let number = Int(lastPathComponent) {
+                                            fetchedGame.steamID = String(number)
                                             getSteamHeader(number: number, name: name) { headerImage in
                                                 if let headerImage = headerImage {
                                                     fetchedGame.metadata["header_img"] = headerImage
