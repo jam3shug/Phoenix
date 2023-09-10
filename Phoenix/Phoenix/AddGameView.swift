@@ -12,7 +12,8 @@ struct AddGameView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
     
-    @State private var showToast = false
+    @Binding var showAddedGameToast: Bool
+    @State private var showDupeGameToast = false
 
     @State private var nameInput: String = ""
     @State private var iconInput: String = ""
@@ -313,12 +314,12 @@ struct AddGameView: View {
                                 dispatchGroup.leave()
                             }
                             if i.name == newGame.name {
-                                showToast = true
+                                showDupeGameToast = true
                             }
                         }
                         
                         dispatchGroup.notify(queue: .main) {
-                            if !showToast {
+                            if !showDupeGameToast {
                                 games.append(newGame)
                                 games = games.sorted()
                                 
@@ -339,6 +340,7 @@ struct AddGameView: View {
                                 if UserDefaults.standard.bool(forKey: "isMetadataFetchingEnabled") {
                                     FetchGameData().getGameMetadata(name: nameInput)
                                 }
+                                showAddedGameToast = true
                                 dismiss()
                             }
                         }
@@ -372,12 +374,11 @@ struct AddGameView: View {
                     )
                     .buttonStyle(PlainButtonStyle())
                     .frame(maxWidth: .infinity)
-
                 }
             }
         }
         .frame(minWidth: 768, maxWidth: 1024, maxHeight: 2000)
-        .toast(isPresenting: $showToast, tapToDismiss: true) {
+        .toast(isPresenting: $showDupeGameToast, tapToDismiss: true) {
             AlertToast(type: .error(Color.red), title: "Game already exists with this name!")
         }
     }
