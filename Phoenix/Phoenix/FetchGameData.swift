@@ -104,7 +104,6 @@ struct FetchGameData {
                                 } else {
                                     getIGDBHeader(lowestIDGame: lowestIDGame, name: name) { headerImage in
                                         if let headerImage = headerImage {
-                                            print("found header !!!! \(headerImage)")
                                             fetchedGame.metadata["header_img"] = headerImage
                                             saveGame(name: name, fetchedGame: fetchedGame)
                                         }

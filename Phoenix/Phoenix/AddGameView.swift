@@ -306,13 +306,17 @@ struct AddGameView: View {
                             is_favorite: false
                         )
                         let dispatchGroup = DispatchGroup()
+                        
                         for i in games {
                             dispatchGroup.enter()
+                            defer {
+                                dispatchGroup.leave()
+                            }
                             if i.name == newGame.name {
-                                showToast.toggle()
+                                showToast = true
                             }
                         }
-                        dispatchGroup.leave()
+                        
                         dispatchGroup.notify(queue: .main) {
                             if !showToast {
                                 games.append(newGame)
