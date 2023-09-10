@@ -90,15 +90,8 @@ struct FetchGameData {
                                                 if let headerImage = headerImage {
                                                     fetchedGame.metadata["header_img"] = headerImage
                                                     saveGame(name: name, fetchedGame: fetchedGame)
-                                                    print("header saved!!!! at \(fetchedGame.metadata["header_img"] ?? "FUCKING NOTHING")")
                                                 } else {
-                                                    print("getting header from igdb")
-                                                    getIGDBHeader(lowestIDGame: lowestIDGame, name: name) { headerImage in
-                                                        if let headerImage = headerImage {
-                                                            fetchedGame.metadata["header_img"] = headerImage
-                                                            saveGame(name: name, fetchedGame: fetchedGame)
-                                                        }
-                                                    }
+                                                    print("steam is on something")
                                                 }
                                             }
                                         } else {
@@ -106,6 +99,14 @@ struct FetchGameData {
                                         }
                                     } else {
                                         logger.write("Invalid URL format.")
+                                    }
+                                } else {
+                                    getIGDBHeader(lowestIDGame: lowestIDGame, name: name) { headerImage in
+                                        if let headerImage = headerImage {
+                                            print("found header !!!! \(headerImage)")
+                                            fetchedGame.metadata["header_img"] = headerImage
+                                            saveGame(name: name, fetchedGame: fetchedGame)
+                                        }
                                     }
                                 }
                             }
@@ -290,24 +291,23 @@ struct FetchGameData {
     }
     
     func saveGame(name: String, fetchedGame: Game) {
-        print("saving game rn, image is \(fetchedGame.metadata["header_img"] ?? "NO HEADER FUCL")")
         let idx = games.firstIndex(where: { $0.name == name })
-       games[idx!] = fetchedGame
+        games[idx!] = fetchedGame
        
-       let encoder = JSONEncoder()
-       encoder.outputFormatting = .prettyPrinted
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
        
-       do {
-           let gamesJSON = try JSONEncoder().encode(games)
+        do {
+            let gamesJSON = try JSONEncoder().encode(games)
            
-           if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
-               // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
-               gamesJSONString = "{\"games\": \(gamesJSONString)}"
-               writeGamesToJSON(data: gamesJSONString)
-           }
-       } catch {
+            if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
+                // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
+                gamesJSONString = "{\"games\": \(gamesJSONString)}"
+                writeGamesToJSON(data: gamesJSONString)
+            }
+        } catch {
            logger.write(error.localizedDescription)
-       }
+        }
     }
 }
 
