@@ -89,11 +89,14 @@ struct FetchGameData {
                                             getSteamHeader(number: number, name: name) { headerImage in
                                                 if let headerImage = headerImage {
                                                     fetchedGame.metadata["header_img"] = headerImage
+                                                    saveGame(name: name, fetchedGame: fetchedGame)
+                                                    print("header saved!!!! at \(fetchedGame.metadata["header_img"] ?? "FUCKING NOTHING")")
                                                 } else {
                                                     print("getting header from igdb")
                                                     getIGDBHeader(lowestIDGame: lowestIDGame, name: name) { headerImage in
                                                         if let headerImage = headerImage {
                                                             fetchedGame.metadata["header_img"] = headerImage
+                                                            saveGame(name: name, fetchedGame: fetchedGame)
                                                         }
                                                     }
                                                 }
@@ -287,6 +290,7 @@ struct FetchGameData {
     }
     
     func saveGame(name: String, fetchedGame: Game) {
+        print("saving game rn, image is \(fetchedGame.metadata["header_img"] ?? "NO HEADER FUCL")")
         let idx = games.firstIndex(where: { $0.name == name })
        games[idx!] = fetchedGame
        
