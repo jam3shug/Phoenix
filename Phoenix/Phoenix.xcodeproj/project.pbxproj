@@ -28,6 +28,7 @@
 		0AF378832953AADE00978137 /* PhoenixUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378822953AADE00978137 /* PhoenixUITestsLaunchTests.swift */; };
 		AD13CDE42AA53A3B00C6FD61 /* IGDB-SWIFT-API in Frameworks */ = {isa = PBXBuildFile; productRef = AD13CDE32AA53A3B00C6FD61 /* IGDB-SWIFT-API */; };
 		AD13CDE82AA542A300C6FD61 /* FetchGameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD13CDE72AA542A300C6FD61 /* FetchGameData.swift */; };
+		AD5E91A62AAE33CB008097C4 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = AD5E91A52AAE33CB008097C4 /* AlertToast */; };
 		B5B66A692A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */; };
 		CAFACC732A426262001C45C4 /* CheckForUpdatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFACC722A426262001C45C4 /* CheckForUpdatesView.swift */; };
 		CAFACC762A42638E001C45C4 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = CAFACC752A42638E001C45C4 /* Sparkle */; };
@@ -90,6 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD5E91A62AAE33CB008097C4 /* AlertToast in Frameworks */,
 				CAFACC762A42638E001C45C4 /* Sparkle in Frameworks */,
 				AD13CDE42AA53A3B00C6FD61 /* IGDB-SWIFT-API in Frameworks */,
 			);
@@ -208,6 +210,7 @@
 			packageProductDependencies = (
 				CAFACC752A42638E001C45C4 /* Sparkle */,
 				AD13CDE32AA53A3B00C6FD61 /* IGDB-SWIFT-API */,
+				AD5E91A52AAE33CB008097C4 /* AlertToast */,
 			);
 			productName = SwiftLauncher;
 			productReference = 0AF378612953AADD00978137 /* Phoenix.app */;
@@ -284,6 +287,7 @@
 			packageReferences = (
 				CAFACC742A42638E001C45C4 /* XCRemoteSwiftPackageReference "Sparkle" */,
 				AD13CDE22AA53A3B00C6FD61 /* XCRemoteSwiftPackageReference "IGDB-SWIFT-API" */,
+				AD5E91A42AAE33CB008097C4 /* XCRemoteSwiftPackageReference "AlertToast" */,
 			);
 			productRefGroup = 0AF378622953AADD00978137 /* Products */;
 			projectDirPath = "";
@@ -688,6 +692,14 @@
 				kind = branch;
 			};
 		};
+		AD5E91A42AAE33CB008097C4 /* XCRemoteSwiftPackageReference "AlertToast" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elai950/AlertToast.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.9;
+			};
+		};
 		CAFACC742A42638E001C45C4 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sparkle-project/Sparkle";
@@ -703,6 +715,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AD13CDE22AA53A3B00C6FD61 /* XCRemoteSwiftPackageReference "IGDB-SWIFT-API" */;
 			productName = "IGDB-SWIFT-API";
+		};
+		AD5E91A52AAE33CB008097C4 /* AlertToast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AD5E91A42AAE33CB008097C4 /* XCRemoteSwiftPackageReference "AlertToast" */;
+			productName = AlertToast;
 		};
 		CAFACC752A42638E001C45C4 /* Sparkle */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -6,10 +6,13 @@
 //
 import Foundation
 import SwiftUI
+import AlertToast
 
 struct AddGameView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
+    
+    @State private var showToast = false
 
     @State private var nameInput: String = ""
     @State private var iconInput: String = ""
@@ -302,28 +305,39 @@ struct AddGameView: View {
                             is_deleted: false,
                             is_favorite: false
                         )
-                        
-                        games.append(newGame)
-                        games = games.sorted()
-                        
-                        let encoder = JSONEncoder()
-                        encoder.outputFormatting = .prettyPrinted
-                        
-                        do {
-                            let gamesJSON = try JSONEncoder().encode(games)
-                            
-                            if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
-                                // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
-                                gamesJSONString = "{\"games\": \(gamesJSONString)}"
-                                writeGamesToJSON(data: gamesJSONString)
+                        let dispatchGroup = DispatchGroup()
+                        for i in games {
+                            dispatchGroup.enter()
+                            if i.name == newGame.name {
+                                showToast.toggle()
                             }
-                        } catch {
-                            logger.write(error.localizedDescription)
                         }
-                        if UserDefaults.standard.bool(forKey: "isMetadataFetchingEnabled") {
-                            FetchGameData().getGameMetadata(name: nameInput)
+                        dispatchGroup.leave()
+                        dispatchGroup.notify(queue: .main) {
+                            if !showToast {
+                                games.append(newGame)
+                                games = games.sorted()
+                                
+                                let encoder = JSONEncoder()
+                                encoder.outputFormatting = .prettyPrinted
+                                
+                                do {
+                                    let gamesJSON = try JSONEncoder().encode(games)
+                                    
+                                    if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
+                                        // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
+                                        gamesJSONString = "{\"games\": \(gamesJSONString)}"
+                                        writeGamesToJSON(data: gamesJSONString)
+                                    }
+                                } catch {
+                                    logger.write(error.localizedDescription)
+                                }
+                                if UserDefaults.standard.bool(forKey: "isMetadataFetchingEnabled") {
+                                    FetchGameData().getGameMetadata(name: nameInput)
+                                }
+                                dismiss()
+                            }
                         }
-                        dismiss()
                     },
                     label: {
                         Text("Save Game")
@@ -359,5 +373,8 @@ struct AddGameView: View {
             }
         }
         .frame(minWidth: 768, maxWidth: 1024, maxHeight: 2000)
+        .toast(isPresenting: $showToast, tapToDismiss: true) {
+            AlertToast(type: .error(Color.red), title: "Game already exists with this name!")
+        }
     }
 }
