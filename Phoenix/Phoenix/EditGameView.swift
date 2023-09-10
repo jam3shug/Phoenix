@@ -37,6 +37,8 @@ struct EditGameView: View {
     @State private var dateInput: Date = .now
     @State private var iconIsImporting: Bool = false
     @State private var headIsImporting: Bool = false
+    
+    @State private var fetchMetadata = false
 
     var body: some View {
 
@@ -289,7 +291,7 @@ struct EditGameView: View {
                 HStack {
                     Button (
                         action: {
-                            FetchGameData().getGameMetadata(name: currentGame.name) { result in }
+                            fetchMetadata = true
                         },
                         label: {
                             Text("Fetch Metadata")
@@ -345,6 +347,10 @@ struct EditGameView: View {
                                 }
                             } catch {
                                 logger.write(error.localizedDescription)
+                            }
+                            
+                            if fetchMetadata {
+                                FetchGameData().getGameMetadata(name: currentGame.name)
                             }
                             
                             dismiss()
