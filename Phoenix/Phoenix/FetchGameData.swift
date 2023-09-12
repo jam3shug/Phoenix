@@ -13,30 +13,9 @@ import Kingfisher
 struct FetchGameData {
     let wrapper: IGDBWrapper = IGDBWrapper(clientID: "aqxuk3zeqtcuquwswjrbohyi2mf5gc", accessToken: "go5xcl37bz41a16plvnudbe6a4fajt")
     
-    func getGameMetadata(name: String, completion: @escaping ([Proto_Game]) -> Void) {
+    func getGamesWithName(name: String, completion: @escaping ([Proto_Game]) -> Void) {
         if let idx = games.firstIndex(where: { $0.name == name }) {
             let game = games[idx]
-            
-            var fetchedGame: Game = .init(
-                launcher: game.launcher,
-                metadata: [
-                    "description": game.metadata["description"] ?? "",
-                    "header_img": game.metadata["header_img"] ?? "",
-                    "last_played": game.metadata["last_played"] ?? "Never",
-                    "rating": game.metadata["rating"] ?? "",
-                    "genre": game.metadata["genre"] ?? "",
-                    "developer": game.metadata["developer"] ?? "",
-                    "publisher": game.metadata["publisher"] ?? "",
-                    "release_date": game.metadata["release_date"] ?? "",
-                ],
-                icon: game.icon,
-                name: game.name,
-                platform: game.platform,
-                status: game.status,
-                recency: game.recency,
-                is_deleted: game.is_deleted,
-                is_favorite: game.is_favorite
-            )
             // Create an APICalypse query to specify the search query and fields.
             if name != "" {
                 let apicalypse = APICalypse()
@@ -75,132 +54,153 @@ struct FetchGameData {
                         gamesWithName = fetchedGames
                     }
                     completion(gamesWithName)
-                    
-//                    for lowestIDGame in fetchedGames {
-//                        fetchedGame.igdbID = String(lowestIDGame.id)
-//                        
-//                        if lowestIDGame.storyline == "" || lowestIDGame.storyline.count > 1500 {
-//                            fetchedGame.metadata["description"] = lowestIDGame.summary
-//                        } else {
-//                            fetchedGame.metadata["description"] = lowestIDGame.storyline
-//                        }
-//                        
-//                        // Get the highest resolution artwork
-//                        for website in lowestIDGame.websites {
-//                            if website.category.rawValue == 13 {
-//                                // Split the URL string by forward slash and get the last component
-//                                if let lastPathComponent = website.url.split(separator: "/").last {
-//                                    if let number = Int(lastPathComponent) {
-//                                        fetchedGame.steamID = String(number)
-//                                        getSteamHeader(number: number, name: name) { headerImage in
-//                                            if let headerImage = headerImage {
-//                                                fetchedGame.metadata["header_img"] = headerImage
-//                                                saveGame(name: name, fetchedGame: fetchedGame)
-//                                            } else {
-//                                                print("steam is on something")
-//                                            }
-//                                        }
-//                                    } else {
-//                                        logger.write("The last path component is not a valid number.")
-//                                    }
-//                                } else {
-//                                    logger.write("Invalid URL format.")
-//                                }
-//                            } else {
-//                                getIGDBHeader(lowestIDGame: lowestIDGame, name: name) { headerImage in
-//                                    if let headerImage = headerImage {
-//                                        fetchedGame.metadata["header_img"] = headerImage
-//                                        saveGame(name: name, fetchedGame: fetchedGame)
-//                                    }
-//                                }
-//                            }
-//                        }
-//                        
-//                        // Combine genres (excluding "Science Fiction")
-//                        var uniqueGenres = Set<String>()
-//                        var combinedCount = 0
-//                        for genre in lowestIDGame.genres {
-//                            if !genre.name.isEmpty {
-//                                if genre.name.lowercased() == "Science Fiction".lowercased() {
-//                                    uniqueGenres.insert("Sci-fi")
-//                                } else {
-//                                    uniqueGenres.insert(genre.name)
-//                                }
-//                                combinedCount += 1
-//                            }
-//                            
-//                            if combinedCount >= 3 {
-//                                break
-//                            }
-//                        }
-//                        // Combine themes (excluding "Science Fiction")
-//                        for theme in lowestIDGame.themes {
-//                            if !theme.name.isEmpty {
-//                                if theme.name.lowercased() == "Science Fiction".lowercased() {
-//                                    uniqueGenres.insert("Sci-fi")
-//                                } else {
-//                                    uniqueGenres.insert(theme.name)
-//                                    combinedCount += 1
-//                                }
-//                            }
-//                            
-//                            if combinedCount >= 3 {
-//                                break
-//                            }
-//                        }
-//                        // Convert the set to a sorted array
-//                        let combinedGenresString = uniqueGenres.sorted().joined(separator: "\n")
-//                        fetchedGame.metadata["genre"] = combinedGenresString
-//                        
-//                        var developers = ""
-//                        var devCount = 0
-//                        var publishers = ""
-//                        var pubCount = 0
-//                        
-//                        for company in lowestIDGame.involvedCompanies {
-//                            if company.publisher && pubCount <= 1 {
-//                                let publisherName = company.company.name
-//                                if !publishers.isEmpty {
-//                                    publishers += "\n"
-//                                }
-//                                publishers += publisherName
-//                                pubCount += 1
-//                            }
-//                            if company.developer && devCount <= 1 {
-//                                let developerName = company.company.name
-//                                if !developers.isEmpty {
-//                                    developers += "\n"
-//                                }
-//                                developers += developerName
-//                                devCount += 1
-//                            }
-//                        }
-//                        
-//                        if !developers.isEmpty {
-//                            // Set the `developer` variable with newline-separated publishers
-//                            fetchedGame.metadata["developer"] = developers
-//                        }
-//                        if !publishers.isEmpty {
-//                            // Set the `publisher` variable with newline-separated publishers
-//                            fetchedGame.metadata["publisher"] = publishers
-//                        }
-//                        
-//                        // Convert Unix timestamp to Date
-//                        let date = Date(timeIntervalSince1970: TimeInterval(lowestIDGame.firstReleaseDate.seconds))
-//                        
-//                        let dateFormatter = DateFormatter()
-//                        dateFormatter.dateFormat = "MMMM dd, yyyy"
-//                        
-//                        fetchedGame.metadata["release_date"] = dateFormatter.string(from: date)
-//                        
-//                        saveGame(name: name, fetchedGame: fetchedGame)
-//                    }
                 }) { error in
                     // Handle any errors that occur during the request
                     print("Error searching for the game: \(error)")
                 }
             }
         }
+    }
+    
+    func convertIGDBGame(igdbGame: Proto_Game, userGame: Game) {
+        var fetchedGame: Game = .init(
+            launcher: userGame.launcher,
+            metadata: [
+                "description": userGame.metadata["description"] ?? "",
+                "header_img": userGame.metadata["header_img"] ?? "",
+                "last_played": userGame.metadata["last_played"] ?? "Never",
+                "rating": userGame.metadata["rating"] ?? "",
+                "genre": userGame.metadata["genre"] ?? "",
+                "developer": userGame.metadata["developer"] ?? "",
+                "publisher": userGame.metadata["publisher"] ?? "",
+                "release_date": userGame.metadata["release_date"] ?? "",
+            ],
+            icon: userGame.icon,
+            name: userGame.name,
+            platform: userGame.platform,
+            status: userGame.status,
+            recency: userGame.recency,
+            is_deleted: userGame.is_deleted,
+            is_favorite: userGame.is_favorite
+        )
+        
+        fetchedGame.igdbID = String(igdbGame.id)
+
+        if igdbGame.storyline == "" || igdbGame.storyline.count > 1500 {
+            fetchedGame.metadata["description"] = igdbGame.summary
+        } else {
+            fetchedGame.metadata["description"] = igdbGame.storyline
+        }
+
+        // Get the highest resolution artwork
+        for website in igdbGame.websites {
+            if website.category.rawValue == 13 {
+                // Split the URL string by forward slash and get the last component
+                if let lastPathComponent = website.url.split(separator: "/").last {
+                    if let number = Int(lastPathComponent) {
+                        fetchedGame.steamID = String(number)
+                        getSteamHeader(number: number, name: igdbGame.name) { headerImage in
+                            if let headerImage = headerImage {
+                                fetchedGame.metadata["header_img"] = headerImage
+                                saveGame(name: igdbGame.name, fetchedGame: fetchedGame)
+                            } else {
+                                print("steam is on something")
+                            }
+                        }
+                    } else {
+                        logger.write("The last path component is not a valid number.")
+                    }
+                } else {
+                    logger.write("Invalid URL format.")
+                }
+            } else {
+                getIGDBHeader(igdbGame: igdbGame, name: igdbGame.name) { headerImage in
+                    if let headerImage = headerImage {
+                        fetchedGame.metadata["header_img"] = headerImage
+                        saveGame(name: igdbGame.name, fetchedGame: fetchedGame)
+                    }
+                }
+            }
+        }
+
+        // Combine genres (excluding "Science Fiction")
+        var uniqueGenres = Set<String>()
+        var combinedCount = 0
+        for genre in igdbGame.genres {
+            if !genre.name.isEmpty {
+                if genre.name.lowercased() == "Science Fiction".lowercased() {
+                    uniqueGenres.insert("Sci-fi")
+                } else {
+                    uniqueGenres.insert(genre.name)
+                }
+                combinedCount += 1
+            }
+
+            if combinedCount >= 3 {
+                break
+            }
+        }
+        // Combine themes (excluding "Science Fiction")
+        for theme in igdbGame.themes {
+            if !theme.name.isEmpty {
+                if theme.name.lowercased() == "Science Fiction".lowercased() {
+                    uniqueGenres.insert("Sci-fi")
+                } else {
+                    uniqueGenres.insert(theme.name)
+                    combinedCount += 1
+                }
+            }
+
+            if combinedCount >= 3 {
+                break
+            }
+        }
+        // Convert the set to a sorted array
+        let combinedGenresString = uniqueGenres.sorted().joined(separator: "\n")
+        fetchedGame.metadata["genre"] = combinedGenresString
+
+        var developers = ""
+        var devCount = 0
+        var publishers = ""
+        var pubCount = 0
+
+        for company in igdbGame.involvedCompanies {
+            if company.publisher && pubCount <= 1 {
+                let publisherName = company.company.name
+                if !publishers.isEmpty {
+                    publishers += "\n"
+                }
+                publishers += publisherName
+                pubCount += 1
+            }
+            if company.developer && devCount <= 1 {
+                let developerName = company.company.name
+                if !developers.isEmpty {
+                    developers += "\n"
+                }
+                developers += developerName
+                devCount += 1
+            }
+        }
+
+        if !developers.isEmpty {
+            // Set the `developer` variable with newline-separated publishers
+            fetchedGame.metadata["developer"] = developers
+        }
+        if !publishers.isEmpty {
+            // Set the `publisher` variable with newline-separated publishers
+            fetchedGame.metadata["publisher"] = publishers
+        }
+
+        // Convert Unix timestamp to Date
+        let date = Date(timeIntervalSince1970: TimeInterval(igdbGame.firstReleaseDate.seconds))
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM dd, yyyy"
+
+        fetchedGame.metadata["release_date"] = dateFormatter.string(from: date)
+
+        saveGame(name: igdbGame.name, fetchedGame: fetchedGame)
     }
     
     func getSteamHeader(number: Int, name: String, completion: @escaping (String?) -> Void) {
@@ -248,8 +248,8 @@ struct FetchGameData {
         }
     }
     
-    func getIGDBHeader(lowestIDGame: Proto_Game, name: String, completion: @escaping (String?) -> Void) {
-        if let highestResArtwork = lowestIDGame.artworks.max(by: { $0.height < $1.height }) {
+    func getIGDBHeader(igdbGame: Proto_Game, name: String, completion: @escaping (String?) -> Void) {
+        if let highestResArtwork = igdbGame.artworks.max(by: { $0.height < $1.height }) {
             let imageURL = imageBuilder(imageID: highestResArtwork.imageID, size: .FHD, imageType: .JPEG)
             if let url = URL(string: imageURL) {
                 URLSession.shared.dataTask(with: url) { headerData, response, error in
@@ -317,25 +317,41 @@ struct FetchGameData {
 }
 
 struct ChooseGameView: View {
+    @Environment(\.dismiss) private var dismiss
+    
     @Binding var games: [Proto_Game]
-    @State var fetchedGame: Proto_Game?
+    @State var selectedGame: Proto_Game?
+    @Binding var fetchedGame: Game?
     
     var body: some View {
-        List(selection: $fetchedGame) {
-            ForEach(games.sorted { $0.id < $1.id }, id: \.self) { game in
-                HStack(spacing: 20) {
-                    KFImage(URL(string: imageBuilder(imageID: game.cover.imageID, size: .COVER_SMALL, imageType: .JPEG)))
-                        .cornerRadius(5)
-                    VStack {
-                        Text(game.name) // UNCENTER ThIS TEXT
-                            .font(.system(size: 20))
-                            .fontWeight(.semibold)
-                        Text(game.summary) //SHORTEN THIS TEXT TO 2 LINES
-                            .font(.caption)
-                            .lineLimit(3)
+        VStack(spacing: 20) {
+            List(selection: $selectedGame) {
+                ForEach(games.sorted { $0.id < $1.id }, id: \.self) { game in
+                    HStack(spacing: 20) {
+                        KFImage(URL(string: imageBuilder(imageID: game.cover.imageID, size: .COVER_SMALL, imageType: .JPEG)))
+                            .cornerRadius(5)
+                        VStack {
+                            Text(game.name) // UNCENTER ThIS TEXT
+                                .font(.system(size: 20))
+                                .fontWeight(.semibold)
+                            Text(game.summary) //SHORTEN THIS TEXT TO 2 LINES
+                                .font(.caption)
+                                .lineLimit(3)
+                        }
                     }
                 }
             }
+            Button(
+                action: {
+                    if let selectedGame = selectedGame, let fetchedGame = fetchedGame {
+                        FetchGameData().convertIGDBGame(igdbGame: selectedGame, userGame: fetchedGame)
+                    }
+                    dismiss()
+                },
+                label: {
+                    Text("Select Game")
+                }
+            )
         }
     }
 }

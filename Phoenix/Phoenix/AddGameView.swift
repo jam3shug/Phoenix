@@ -19,7 +19,8 @@ struct AddGameView: View {
     @State private var showChooseGameView: Bool = false
     
     @State var fetchedGames: [Proto_Game] = []
-
+    @State var fetchedGame: Game?
+    
     @State private var nameInput: String = ""
     @State private var iconInput: String = ""
     @State private var iconOutput: String = ""
@@ -343,11 +344,10 @@ struct AddGameView: View {
                                     logger.write(error.localizedDescription)
                                 }
                                 if UserDefaults.standard.bool(forKey: "isMetadataFetchingEnabled") {
-                                    FetchGameData().getGameMetadata(name: nameInput) { gamesWithName in
+                                    FetchGameData().getGamesWithName(name: nameInput) { gamesWithName in
                                         fetchedGames = gamesWithName
                                         showChooseGameView.toggle()
                                     }
-                                    
                                 }
 //                                showAddedGameToast = true
 //                                dismiss()
@@ -390,8 +390,32 @@ struct AddGameView: View {
         .toast(isPresenting: $showDupeGameToast, tapToDismiss: true) {
             AlertToast(type: .error(Color.red), title: "Game already exists with this name!")
         }
-        .sheet(isPresented: $showChooseGameView) {
-            ChooseGameView(games: $fetchedGames)
+        .sheet(isPresented: $showChooseGameView, onDismiss: {
+            if let fetchedGame = fetchedGame {
+                saveGame(game: fetchedGame)
+            }
+        }) {
+            ChooseGameView(games: $fetchedGames, fetchedGame: $fetchedGame)
+        }
+    }
+    
+    func saveGame(game: Game) {
+        games.append(game)
+        games = games.sorted()
+        
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        
+        do {
+            let gamesJSON = try JSONEncoder().encode(games)
+            
+            if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
+                // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
+                gamesJSONString = "{\"games\": \(gamesJSONString)}"
+                writeGamesToJSON(data: gamesJSONString)
+            }
+        } catch {
+            logger.write(error.localizedDescription)
         }
     }
 }
