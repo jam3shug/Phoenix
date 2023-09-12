@@ -350,7 +350,7 @@ struct EditGameView: View {
                             }
                             
                             if fetchMetadata {
-                                FetchGameData().getGameMetadata(name: currentGame.name)
+                                FetchGameData().getGameMetadata(name: currentGame.name) {games in }
                             }
                             
                             dismiss()

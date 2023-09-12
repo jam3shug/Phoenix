@@ -6,6 +6,7 @@
 //
 import Foundation
 import SwiftUI
+import IGDB_SWIFT_API
 import AlertToast
 
 struct AddGameView: View {
@@ -14,6 +15,10 @@ struct AddGameView: View {
     
     @Binding var showAddedGameToast: Bool
     @State private var showDupeGameToast = false
+    
+    @State private var showChooseGameView: Bool = false
+    
+    @State var fetchedGames: [Proto_Game] = []
 
     @State private var nameInput: String = ""
     @State private var iconInput: String = ""
@@ -338,10 +343,14 @@ struct AddGameView: View {
                                     logger.write(error.localizedDescription)
                                 }
                                 if UserDefaults.standard.bool(forKey: "isMetadataFetchingEnabled") {
-                                    FetchGameData().getGameMetadata(name: nameInput)
+                                    FetchGameData().getGameMetadata(name: nameInput) { gamesWithName in
+                                        fetchedGames = gamesWithName
+                                        showChooseGameView.toggle()
+                                    }
+                                    
                                 }
-                                showAddedGameToast = true
-                                dismiss()
+//                                showAddedGameToast = true
+//                                dismiss()
                             }
                         }
                     },
@@ -380,6 +389,9 @@ struct AddGameView: View {
         .frame(minWidth: 768, maxWidth: 1024, maxHeight: 2000)
         .toast(isPresenting: $showDupeGameToast, tapToDismiss: true) {
             AlertToast(type: .error(Color.red), title: "Game already exists with this name!")
+        }
+        .sheet(isPresented: $showChooseGameView) {
+            ChooseGameView(games: $fetchedGames)
         }
     }
 }
