@@ -1,5 +1,5 @@
 //
-//  HeaderUtils.swift
+//  ImageUtils.swift
 //  Phoenix
 //
 //  Created by Kaleb Rosborough on 2022-12-25.
@@ -80,6 +80,8 @@ func getBlurRadiusForImage(_ geometry: GeometryProxy) -> CGFloat {
 
     return blur * 10  // Values will range from 0 - 10
 }
+
+func saveImageToFile() {}
 
 /// Loads an image from the file at the given file path.
 ///
