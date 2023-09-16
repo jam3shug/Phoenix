@@ -81,7 +81,112 @@ func getBlurRadiusForImage(_ geometry: GeometryProxy) -> CGFloat {
     return blur * 10  // Values will range from 0 - 10
 }
 
-func saveImageToFile() {}
+func saveIconToFile(result: Result<[URL], Error>, name: String, completion: @escaping ((String) -> Void)) {
+    do {
+        let selectedFile: URL = try result.get().first ?? URL(fileURLWithPath: "")
+        
+        let iconData = try Data(contentsOf: selectedFile)
+        // Resize the image to 48x48 pixels
+        if let image = NSImage(data: iconData) {
+            let newSize = NSSize(width: 48, height: 48)
+            let newImage = NSImage(size: newSize)
+            
+            newImage.lockFocus()
+            image.draw(in: NSRect(origin: .zero, size: newSize),
+                       from: NSRect(origin: .zero, size: image.size),
+                       operation: .sourceOver,
+                       fraction: 1.0)
+            newImage.unlockFocus()
+            
+            // Convert the resized image to data
+            if let resizedImageData = newImage.tiffRepresentation {
+                let fileManager = FileManager.default
+                let cachedImagesDirectoryURL: URL
+                do {
+                    cachedImagesDirectoryURL = try fileManager.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+                        .appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
+                } catch {
+                    print("Failed to get directory URL: \(error.localizedDescription)")
+                    return
+                }
+                
+                if !fileManager.fileExists(atPath: cachedImagesDirectoryURL.path) {
+                    do {
+                        try fileManager.createDirectory(at: cachedImagesDirectoryURL, withIntermediateDirectories: true, attributes: nil)
+                        print("Created 'Phoenix/cachedImages' directory")
+                    } catch {
+                        fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
+                    }
+                }
+                
+                var destinationURL: URL
+                
+                
+                if selectedFile.pathExtension.lowercased() == "jpg" || selectedFile.pathExtension.lowercased() == "jpeg" {
+                    destinationURL = cachedImagesDirectoryURL.appendingPathComponent("\(name)_icon.jpg")
+                } else {
+                    destinationURL = cachedImagesDirectoryURL.appendingPathComponent("\(name)_icon.png")
+                }
+                
+                do {
+                    try resizedImageData.write(to: destinationURL)
+                    completion(destinationURL.relativeString)
+                    print("Resized and saved image to: \(destinationURL.path)")
+                } catch {
+                    print("Failed to save resized image: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    catch {
+        print("Failed to get selected file: \(error.localizedDescription)")
+    }
+}
+
+func saveHeaderToFile(result: Result<[URL], Error>, name: String, completion: @escaping ((String) -> Void)) {
+    do {
+        let selectedFile: URL = try result.get().first ?? URL(fileURLWithPath: "")
+        
+        let headerData = try Data(contentsOf: selectedFile)
+                                        
+        let fileManager = FileManager.default
+        guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
+            fatalError("Unable to retrieve application support directory URL")
+        }
+        
+        let cachedImagesDirectoryPath = appSupportURL.appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
+        
+        if !fileManager.fileExists(atPath: cachedImagesDirectoryPath.path) {
+            do {
+                try fileManager.createDirectory(at: cachedImagesDirectoryPath, withIntermediateDirectories: true, attributes: nil)
+                print("Created 'Phoenix/cachedImages' directory")
+            } catch {
+                fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
+            }
+        }
+                
+        var destinationURL: URL
+        
+        
+        if selectedFile.pathExtension.lowercased() == "jpg" || selectedFile.pathExtension.lowercased() == "jpeg" {
+            destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_icon.jpg")
+        } else {
+            destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_icon.png")
+        }
+        
+        do {
+            try headerData.write(to: destinationURL)
+            completion(destinationURL.relativeString)
+            print("Resized and saved image to: \(destinationURL.path)")
+        } catch {
+            print("Failed to save resized image: \(error.localizedDescription)")
+        }
+
+    }
+    catch {
+        print("Failed to get selected file: \(error.localizedDescription)")
+    }
+}
 
 /// Loads an image from the file at the given file path.
 ///
