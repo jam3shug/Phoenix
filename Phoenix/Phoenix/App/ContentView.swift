@@ -24,7 +24,7 @@ struct ContentView: View {
     @Binding var isEditingGame: Bool
     @Binding var isPlayingGame: Bool
     @State var picker: Bool = true
-    @State var showAddedGameToast: Bool = false
+    @State var showSuccessToast: Bool = false
 
     // The stuff that is actually on screen
     var body: some View {
@@ -49,7 +49,7 @@ struct ContentView: View {
                                 self.refresh.toggle()
                             },
                             content: {
-                                GameInputView(isNewGame: true, showAddedGameToast: $showAddedGameToast)
+                                GameInputView(isNewGame: true, gameName: "", showSuccessToast: $showSuccessToast)
                             }
                         )
                     }
@@ -92,7 +92,7 @@ struct ContentView: View {
             }
         }
         .searchable(text: $searchText, placement: .sidebar)
-        .toast(isPresenting: $showAddedGameToast, tapToDismiss: true) {
+        .toast(isPresenting: $showSuccessToast, tapToDismiss: true) {
             AlertToast(type: .complete(Color.green), title: "Game created.")
         }
     }

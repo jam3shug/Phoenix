@@ -5,6 +5,7 @@
 //  Created by Kaleb Rosborough on 2022-12-28.
 //
 import SwiftUI
+import AlertToast
 
 struct GameDetailView: View {
     
@@ -13,6 +14,8 @@ struct GameDetailView: View {
     @Binding var refresh: Bool
     @Binding var editingGame: Bool
     @Binding var playingGame: Bool
+    @State var showSuccessToast: Bool = false
+    
     @State private var timer: Timer?
 
     // initialize colors
@@ -96,9 +99,7 @@ struct GameDetailView: View {
                                     refresh.toggle()
                                 },
                                 content: {
-                                    let idx = games.firstIndex(where: { $0.name == selectedGame })
-                                    let game = games[idx!]
-                                    EditGameView(currentGame: .constant(game))
+                                    GameInputView(isNewGame: false, gameName: selectedGame ?? "", showSuccessToast: $showSuccessToast)
                                 }
                             )
                             .buttonStyle(.plain)
@@ -234,6 +235,9 @@ struct GameDetailView: View {
             let idx = games.firstIndex(where: { $0.name == selectedGame })
             let game = games[idx!]
             playGame(game: game)
+        }
+        .toast(isPresenting: $showSuccessToast, tapToDismiss: true) {
+            AlertToast(type: .complete(Color.green), title: "Game edited.")
         }
     }
     

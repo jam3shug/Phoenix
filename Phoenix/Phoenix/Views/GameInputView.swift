@@ -13,8 +13,9 @@ struct GameInputView: View {
     @Environment(\.dismiss) private var dismiss
     
     var isNewGame: Bool
+    var gameName: String
     
-    @Binding var showAddedGameToast: Bool
+    @Binding var showSuccessToast: Bool
     @State private var showDupeGameToast = false
     
     @State private var showChooseGameView: Bool = false
@@ -129,7 +130,7 @@ struct GameInputView: View {
                                                 showChooseGameView.toggle()
                                             }
                                         }
-                                        //                                showAddedGameToast = true
+                                        //                                showSuccessToast = true
                                         //                                dismiss()
                                     }
                                 }
@@ -137,6 +138,8 @@ struct GameInputView: View {
                                 let idx = games.firstIndex(where: { $0.name == nameInput })
                                 games[idx!] = game
                                 saveGame()
+                                showSuccessToast = true
+                                dismiss()
                             }
                         },
                         label: {
@@ -169,14 +172,16 @@ struct GameInputView: View {
         }
         .onAppear() {
             if !isNewGame {
-                let idx = games.firstIndex(where: { $0.name == nameInput })
+                let idx = games.firstIndex(where: { $0.name == gameName })
                 let currentGame = games[idx!]
                 nameInput = currentGame.name
+                iconOutput = currentGame.icon
                 platInput = currentGame.platform
                 statusInput = currentGame.status
                 cmdInput = currentGame.launcher
                 descInput = currentGame.metadata["description"] ?? ""
                 genreInput = currentGame.metadata["genre"] ?? ""
+                headOutput = currentGame.metadata["header_img"] ?? ""
                 rateInput = currentGame.metadata["rating"] ?? ""
                 devInput = currentGame.metadata["developer"] ?? ""
                 pubInput = currentGame.metadata["publisher"] ?? ""
