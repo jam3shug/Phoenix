@@ -92,12 +92,12 @@ struct Game: Codable, Comparable, Hashable {
             "publisher": "",
         ],
         icon: String = "PlaceholderImage",
-        name: String,
+        name: String = "",
         platform: Platform = Platform.none,
         status: Status = Status.none,
         recency: Recency = Recency.never,
-        is_deleted: Bool,
-        is_favorite: Bool
+        is_deleted: Bool = false,
+        is_favorite: Bool = false
     ) {
         self.steamID = steamID
         self.igdbID = igdbID

@@ -7,14 +7,6 @@
 import Foundation
 import SwiftUI
 
-extension String {
-    func capitalizingFirstLetter() -> String {
-        let first = String(self.prefix(1)).uppercased()
-        let other = String(self.dropFirst())
-        return first + other
-    }
-}
-
 struct EditGameView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
@@ -58,7 +50,6 @@ struct EditGameView: View {
                         Button(
                             action: {
                                 iconIsImporting = true
-                                
                             },
                             label: {
                                 Text("Browse")

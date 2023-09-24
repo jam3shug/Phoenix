@@ -166,8 +166,7 @@ func saveHeaderToFile(result: Result<[URL], Error>, name: String, completion: @e
         }
                 
         var destinationURL: URL
-        
-        
+
         if selectedFile.pathExtension.lowercased() == "jpg" || selectedFile.pathExtension.lowercased() == "jpeg" {
             destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_icon.jpg")
         } else {
@@ -181,7 +180,6 @@ func saveHeaderToFile(result: Result<[URL], Error>, name: String, completion: @e
         } catch {
             print("Failed to save resized image: \(error.localizedDescription)")
         }
-
     }
     catch {
         print("Failed to get selected file: \(error.localizedDescription)")

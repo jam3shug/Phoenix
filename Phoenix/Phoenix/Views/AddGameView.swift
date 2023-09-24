@@ -41,149 +41,45 @@ struct AddGameView: View {
         ScrollView {
             VStack(alignment: .leading) {
                 Group {
-                    HStack {
-                        Text("Name")
-                            .frame(width: 70, alignment: .leading)
-                        TextField("Enter game name", text: $nameInput)
-                            .padding()
-                            .accessibility(label: Text("NameInput"))
-                    }
+                    TextBox(textBoxName: "Name", placeholder: "Enter game name", input: $nameInput) // Name input
                     
-                    HStack {
-                        Text("Icon")
-                            .frame(width: 70, alignment: .leading)
-                            .offset(x: -15)
-                        Button(
-                            action: {
-                                iconIsImporting = true
-                            },
-                            label: {
-                                Text("Browse")
-                            })
-                        Text(iconOutput)
-                    }
-                    .padding()
-                    .fileImporter(
-                        isPresented: $iconIsImporting,
-                        allowedContentTypes: [.image],
-                        allowsMultipleSelection: false
-                    ) { result in
-                        saveIconToFile(result: result, name: nameInput) { image in
-                            iconOutput = image
-                        }
-                    }
-                    
-                    
-                    HStack {
-                        Text("Platform")
-                            .frame(width: 70, alignment: .leading)
+                    ImageImportButton(type: "Icon", isImporting: $iconIsImporting, output: $iconOutput, gameName: nameInput) 
+        
+                    SlotInput(contentName: "Platform", content: {
                         Picker("", selection: $platInput) {
                             ForEach(Platform.allCases) { platform in
                                 Text(platform.displayName)
                             }
                         }
-                        .labelsHidden()
-                        .padding()
-                        .accessibility(label: Text("Platform Input"))
-                    }
+                    })
                     
-                    HStack {
-                        Text("Status")
-                            .frame(width: 70, alignment: .leading)
+                    SlotInput(contentName: "Status", content: {
                         Picker("", selection: $statusInput) {
                             ForEach(Status.allCases) { status in
                                 Text(status.displayName)
                             }
                         }
-                        .labelsHidden()
-                        .padding()
-                        .accessibility(label: Text("Status Input"))
-                    }
+                    })
                     
-                    HStack {
-                        Text("Command")
-                            .frame(width: 70, alignment: .leading)
-                        TextField("Enter terminal command to launch game", text: $cmdInput)
-                            .padding()
-                            .accessibility(label: Text("Command Input"))
-                    }
+                    TextBox(textBoxName: "Command", placeholder: "Enter terminal command to launch game", input: $cmdInput)
                 }
                 DisclosureGroup("Metadata (automatically fetched by default)") {
                     VStack(alignment: .leading) {
-                        HStack {
-                            Text("Description")
-                                .frame(width: 70, alignment: .leading)
-                            TextEditor(text: $descInput)
-                                .scrollContentBackground(.hidden)
-                                .border(Color.gray.opacity(0.1), width: 1)
-                                .background(Color.gray.opacity(0.05))
-                                .frame(minHeight: 50)
-                                .padding()
-                                .accessibility(label: Text("Description Input"))
-                        }
-                        HStack {
-                            Text("Genres")
-                                .frame(width: 70, alignment: .leading)
-                            TextEditor(text: $genreInput)
-                                .scrollContentBackground(.hidden)
-                                .border(Color.gray.opacity(0.1), width: 1)
-                                .background(Color.gray.opacity(0.05))
-                                .frame(minHeight: 50)
-                                .padding()
-                                .accessibility(label: Text("Genre Input"))
-                        }
-                        HStack {
-                            Text("Header")
-                                .frame(width: 70, alignment: .leading)
-                                .offset(x: -15)
-                            Button(
-                                action: {
-                                    headIsImporting = true
-                                    
-                                },
-                                label: {
-                                    Text("Browse")
-                                })
-                            Text(headOutput)
-                        }
-                        .padding()
-                        .fileImporter(
-                            isPresented: $headIsImporting,
-                            allowedContentTypes: [.image],
-                            allowsMultipleSelection: false
-                        ) { result in
-                            saveHeaderToFile(result: result, name: nameInput) { image in
-                                headOutput = image
-                            }
-                        }
-                        HStack {
-                            Text("Rating")
-                                .frame(width: 70, alignment: .leading)
-                            TextField("X / 10", text: $rateInput)
-                                .padding()
-                                .accessibility(label: Text("Rating Input"))
-                        }
-                        HStack {
-                            Text("Developer")
-                                .frame(width: 70, alignment: .leading)
-                            TextField("Enter game developer", text: $devInput)
-                                .padding()
-                                .accessibility(label: Text("Developer Input"))
-                            
-                        }
-                        HStack {
-                            Text("Publisher")
-                                .frame(width: 70, alignment: .leading)
-                            TextField("Enter game publisher", text: $pubInput)
-                                .padding()
-                                .accessibility(label: Text("Publisher Input"))
-                        }
-                        HStack {
-                            Text("Release Date")
-                                .frame(width: 87, alignment: .leading)
+                        LargeTextBox(textBoxName: "Description", input: $descInput)
+                        
+                        LargeTextBox(textBoxName: "Genres", input: $genreInput)
+                        
+                        ImageImportButton(type: "Header", isImporting: $headIsImporting, output: $headOutput, gameName: nameInput)
+                        
+                        TextBox(textBoxName: "Rating", placeholder: "X / 10", input: $rateInput)
+                        
+                        TextBox(textBoxName: "Developer", placeholder: "Enter game developer", input: $devInput)
+                        
+                        TextBox(textBoxName: "Publisher", placeholder: "Enter game publisher", input: $pubInput)
+                        
+                        SlotInput(contentName: "Release Date", content: {
                             DatePicker("", selection: $dateInput, in: ...Date(), displayedComponents: .date)
-                                .labelsHidden()
-                        }
+                        })
                     }
                 }
             }

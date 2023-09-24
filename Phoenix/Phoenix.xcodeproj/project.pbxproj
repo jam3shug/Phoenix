@@ -28,6 +28,10 @@
 		0AF378832953AADE00978137 /* PhoenixUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF378822953AADE00978137 /* PhoenixUITestsLaunchTests.swift */; };
 		AD13CDE42AA53A3B00C6FD61 /* IGDB-SWIFT-API in Frameworks */ = {isa = PBXBuildFile; productRef = AD13CDE32AA53A3B00C6FD61 /* IGDB-SWIFT-API */; };
 		AD13CDE82AA542A300C6FD61 /* FetchGameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD13CDE72AA542A300C6FD61 /* FetchGameData.swift */; };
+		AD5287CA2AC007CC001673F5 /* TextBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287C92AC007CC001673F5 /* TextBox.swift */; };
+		AD5287CC2AC0093E001673F5 /* ImageImportButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287CB2AC0093E001673F5 /* ImageImportButton.swift */; };
+		AD5287CE2AC00A1A001673F5 /* SlotInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287CD2AC00A1A001673F5 /* SlotInput.swift */; };
+		AD5287D02AC010AA001673F5 /* LargeTextBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287CF2AC010AA001673F5 /* LargeTextBox.swift */; };
 		AD5E91A62AAE33CB008097C4 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = AD5E91A52AAE33CB008097C4 /* AlertToast */; };
 		AD92C4F62AAEBAF40058E1EA /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = AD92C4F52AAEBAF40058E1EA /* Kingfisher */; };
 		B5B66A692A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */; };
@@ -80,6 +84,10 @@
 		0AF378802953AADE00978137 /* PhoenixUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoenixUITests.swift; sourceTree = "<group>"; };
 		0AF378822953AADE00978137 /* PhoenixUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoenixUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		AD13CDE72AA542A300C6FD61 /* FetchGameData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchGameData.swift; sourceTree = "<group>"; };
+		AD5287C92AC007CC001673F5 /* TextBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBox.swift; sourceTree = "<group>"; };
+		AD5287CB2AC0093E001673F5 /* ImageImportButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageImportButton.swift; sourceTree = "<group>"; };
+		AD5287CD2AC00A1A001673F5 /* SlotInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotInput.swift; sourceTree = "<group>"; };
+		AD5287CF2AC010AA001673F5 /* LargeTextBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeTextBox.swift; sourceTree = "<group>"; };
 		B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenGamesSettingsView.swift; sourceTree = "<group>"; };
 		CAFACC722A426262001C45C4 /* CheckForUpdatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForUpdatesView.swift; sourceTree = "<group>"; };
 		CAFACC772A4263DB001C45C4 /* UpdaterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterViewModel.swift; sourceTree = "<group>"; };
@@ -233,6 +241,10 @@
 		ADB4CF092AB537CA00BDF853 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				AD5287C92AC007CC001673F5 /* TextBox.swift */,
+				AD5287CF2AC010AA001673F5 /* LargeTextBox.swift */,
+				AD5287CB2AC0093E001673F5 /* ImageImportButton.swift */,
+				AD5287CD2AC00A1A001673F5 /* SlotInput.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -401,7 +413,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD5287D02AC010AA001673F5 /* LargeTextBox.swift in Sources */,
 				AD13CDE82AA542A300C6FD61 /* FetchGameData.swift in Sources */,
+				AD5287CE2AC00A1A001673F5 /* SlotInput.swift in Sources */,
 				0AE9B6F62A3ADA0E00800850 /* GeneralSettingsView.swift in Sources */,
 				0AF378672953AADD00978137 /* ContentView.swift in Sources */,
 				CAFACC782A4263DB001C45C4 /* UpdaterViewModel.swift in Sources */,
@@ -409,12 +423,14 @@
 				0AE9B6F82A3ADAD700800850 /* AppearanceSettingsView.swift in Sources */,
 				0A02F8EC295BB92400FE29F4 /* AddGameView.swift in Sources */,
 				0A87BBB5295D7B1A0009AF47 /* GameDetailView.swift in Sources */,
+				AD5287CC2AC0093E001673F5 /* ImageImportButton.swift in Sources */,
 				0A947C9A2958990D00A2CE66 /* ImageUtils.swift in Sources */,
 				CAFAFAA92967600700B89003 /* LogUtils.swift in Sources */,
 				CAFACC732A426262001C45C4 /* CheckForUpdatesView.swift in Sources */,
 				0A20E1F12957FD4C00B7756E /* JsonUtils.swift in Sources */,
 				0AF378652953AADD00978137 /* PhoenixApp.swift in Sources */,
 				0A20E1EF2957E8B900B7756E /* Game.swift in Sources */,
+				AD5287CA2AC007CC001673F5 /* TextBox.swift in Sources */,
 				B5B66A692A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift in Sources */,
 				0AE9B6F42A3AD97100800850 /* SettingsView.swift in Sources */,
 				0A87BBB3295D7A360009AF47 /* EditGameView.swift in Sources */,
