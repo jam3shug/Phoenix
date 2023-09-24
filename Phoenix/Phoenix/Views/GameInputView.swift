@@ -105,7 +105,7 @@ struct GameInputView: View {
                     Button(
                         action: {
                             let game: Game = .init(
-                                launcher: cmdInput, metadata: ["description": descInput, "header_img": headOutput, "rating": rateInput, "genre": genreInput, "developer": devInput, "publisher": pubInput, "release_date": convertIntoLong(input: dateInput)], icon: iconOutput, name: nameInput, platform: platInput, status: statusInput
+                                launcher: cmdInput, metadata: ["description": descInput, "header_img": headOutput, "rating": rateInput, "genre": genreInput, "developer": devInput, "publisher": pubInput, "release_date": convertIntoString(input: dateInput)], icon: iconOutput, name: nameInput, platform: platInput, status: statusInput
                             )
                             if isNewGame {
                                 let dispatchGroup = DispatchGroup()
