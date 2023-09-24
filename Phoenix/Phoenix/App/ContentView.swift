@@ -49,7 +49,7 @@ struct ContentView: View {
                                 self.refresh.toggle()
                             },
                             content: {
-                                AddGameView(showAddedGameToast: $showAddedGameToast)
+                                GameInputView(isNewGame: true, showAddedGameToast: $showAddedGameToast)
                             }
                         )
                     }
