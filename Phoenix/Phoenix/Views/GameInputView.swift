@@ -186,12 +186,7 @@ struct GameInputView: View {
                 devInput = currentGame.metadata["developer"] ?? ""
                 pubInput = currentGame.metadata["publisher"] ?? ""
                 // Create Date Formatter
-                let dateFormatter = DateFormatter()
-                
-                // Set Date Format
-                dateFormatter.dateFormat = "MMM dd, yyyy"
-                // Convert String to Date
-                dateInput = dateFormatter.date(from: currentGame.metadata["release_date"] ?? "") ?? Date()
+                convertIntoDate(input: currentGame.metadata["release_date"] ?? "")
             }
         }
     }
