@@ -158,7 +158,7 @@ struct GameInputView: View {
             }
         }
         .frame(minWidth: 768, maxWidth: 1024, maxHeight: 2000)
-        .toast(isPresenting: $showDupeGameToast, tapToDismiss: true) { // Popup if game already exists with name
+        .toast(isPresenting: $showDupeGameToast, tapToDismiss: true) { // Alert if game already exists with name
             AlertToast(type: .error(Color.red), title: "Game already exists with this name!")
         }
         .sheet(isPresented: $showChooseGameView, onDismiss: {
@@ -167,9 +167,10 @@ struct GameInputView: View {
                 games = games.sorted()
                 saveGame()
             }
-        }) {
+        }, content: {
             ChooseGameView(games: $fetchedGames, fetchedGame: $fetchedGame)
-        }
+                .frame()
+        })
         .onAppear() {
             if !isNewGame {
                 let idx = games.firstIndex(where: { $0.name == gameName })
@@ -186,7 +187,7 @@ struct GameInputView: View {
                 devInput = currentGame.metadata["developer"] ?? ""
                 pubInput = currentGame.metadata["publisher"] ?? ""
                 // Create Date Formatter
-                convertIntoDate(input: currentGame.metadata["release_date"] ?? "")
+                dateInput = convertIntoDate(input: currentGame.metadata["release_date"] ?? "")
             }
         }
     }

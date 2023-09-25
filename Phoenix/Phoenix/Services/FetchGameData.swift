@@ -38,8 +38,8 @@ struct FetchGameData {
                                     websites.url,
                                     websites.category
                                     """) // Specify the fields you want to retrieve
-                    .where(query: "name ~ *\"\(name)\"* & (category = 0 | category = 2 | category = 3 | category = 8)") // Use the "where" clause to search by name
-                    .limit(value: 25)
+                    .where(query: "name ~ \"\(name)\" & (category = 0 | category = 2 | category = 3 | category = 8)") // Use the "where" clause to search by name
+                    .limit(value: 50)
                 
                 // Make the API request to search for the game by name.
                 wrapper.games(apiCalypse: apicalypse, result: { fetchedGames in
@@ -312,46 +312,6 @@ struct FetchGameData {
             }
         } catch {
            logger.write(error.localizedDescription)
-        }
-    }
-}
-
-struct ChooseGameView: View {
-    @Environment(\.dismiss) private var dismiss
-    
-    @Binding var games: [Proto_Game]
-    @State var selectedGame: Proto_Game?
-    @Binding var fetchedGame: Game?
-    
-    var body: some View {
-        VStack(spacing: 20) {
-            List(selection: $selectedGame) {
-                ForEach(games.sorted { $0.id < $1.id }, id: \.self) { game in
-                    HStack(spacing: 20) {
-                        KFImage(URL(string: imageBuilder(imageID: game.cover.imageID, size: .COVER_SMALL, imageType: .JPEG)))
-                            .cornerRadius(5)
-                        VStack {
-                            Text(game.name) // UNCENTER ThIS TEXT
-                                .font(.system(size: 20))
-                                .fontWeight(.semibold)
-                            Text(game.summary) //SHORTEN THIS TEXT TO 2 LINES
-                                .font(.caption)
-                                .lineLimit(3)
-                        }
-                    }
-                }
-            }
-            Button(
-                action: {
-                    if let selectedGame = selectedGame, let fetchedGame = fetchedGame {
-                        FetchGameData().convertIGDBGame(igdbGame: selectedGame, userGame: fetchedGame)
-                    }
-                    dismiss()
-                },
-                label: {
-                    Text("Select Game")
-                }
-            )
         }
     }
 }
