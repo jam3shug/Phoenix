@@ -55,43 +55,14 @@ struct GameDetailView: View {
                     VStack(alignment: .leading) {
                         HStack(alignment: .top) {
                             // play button
-                            Button(
-                                action: {
-                                    playingGame.toggle()
-                                },
-                                label: {
-                                    Image(systemName: "play.fill")
-                                        .fontWeight(.bold)
-                                        .foregroundColor(playText)
-                                        .font(.system(size: 25))
-                                    Text(" Play")
-                                        .fontWeight(.medium)
-                                        .foregroundColor(playText)
-                                        .font(.system(size: 25))
-                                }
-                            )
+                            LargeToggleButton(toggle: $playingGame, symbol: "play.fill", text: "Play", textColor: playText, bgColor: playColor)
                             .alert(
                                 "No launcher configured. Please configure a launch command to run \(selectedGame ?? "this game")",
                                 isPresented: $showingAlert
                             ) {}
-                            .buttonStyle(.plain)
-                            .frame(width: 175, height: 50)
-                            .background(playColor)
-                            .cornerRadius(10)
-                            .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 5))
-
+                            
                             // settings button
-                            Button(
-                                action: {
-                                    editingGame.toggle()
-                                },
-                                label: {
-                                    Image(systemName: "pencil")
-                                        .fontWeight(.bold)
-                                        .foregroundColor(settingsText)
-                                        .font(.system(size: 27))
-                                }
-                            )
+                            SmallToggleButton(toggle: $editingGame, symbol: "pencil", textColor: settingsText, bgColor: settingsColor)
                             .sheet(
                                 isPresented: $editingGame,
                                 onDismiss: {
@@ -102,16 +73,12 @@ struct GameDetailView: View {
                                     GameInputView(isNewGame: false, gameName: selectedGame ?? "", showSuccessToast: $showSuccessToast)
                                 }
                             )
-                            .buttonStyle(.plain)
-                            .frame(width: 50, height: 50)
-                            .background(settingsColor)
-                            .cornerRadius(10)
                         } // hstack
                         .frame(alignment: .leading)
 
                         HStack(alignment: .top) {
                             // description
-                            VStack(alignment: .leading) {
+                            TextCard(content: {
                                 if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
                                     let game = games[idx]
                                     // Game Description
@@ -127,16 +94,9 @@ struct GameDetailView: View {
                                             .padding(10)
                                     }
                                 }
-                            }
+                            })
                             .frame(idealWidth: 400, maxWidth: 550, maxHeight: .infinity, alignment: .topLeading) // controls the dimensions and alignment of the description text
-                            .background(Color.gray.opacity(0.05))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 7.5)
-                                    .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
-                            )
-                            .cornerRadius(7.5)
                             .padding(.trailing, 7.5)
-
                             VStack(alignment: .leading) {
                                 if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
                                     let game = games[idx]
