@@ -19,10 +19,10 @@ struct GameDetailView: View {
     @State private var timer: Timer?
 
     // initialize colors
-    @State var playColor = Color.green
-    @State var settingsColor = Color.gray.opacity(0.1)
-    @State var playText = Color.white
-    @State var settingsText = Color.primary
+    @State var bgPlayColor = Color.green
+    @State var bgSettingsColor = Color.gray.opacity(0.1)
+    @State var textPlayColor = Color.white
+    @State var textSettingsColor = Color.primary
 
     init(selectedGame: Binding<String?>, refresh: Binding<Bool>, editingGame: Binding<Bool>, playingGame: Binding<Bool>) {
         _selectedGame = selectedGame
@@ -55,14 +55,14 @@ struct GameDetailView: View {
                     VStack(alignment: .leading) {
                         HStack(alignment: .top) {
                             // play button
-                            LargeToggleButton(toggle: $playingGame, symbol: "play.fill", text: "Play", textColor: playText, bgColor: playColor)
+                            LargeToggleButton(toggle: $playingGame, symbol: "play.fill", text: "Play", textColor: textPlayColor, bgColor: bgPlayColor)
                             .alert(
                                 "No launcher configured. Please configure a launch command to run \(selectedGame ?? "this game")",
                                 isPresented: $showingAlert
                             ) {}
                             
                             // settings button
-                            SmallToggleButton(toggle: $editingGame, symbol: "pencil", textColor: settingsText, bgColor: settingsColor)
+                            SmallToggleButton(toggle: $editingGame, symbol: "pencil", textColor: textSettingsColor, bgColor: bgSettingsColor)
                             .sheet(
                                 isPresented: $editingGame,
                                 onDismiss: {
@@ -77,93 +77,34 @@ struct GameDetailView: View {
                         .frame(alignment: .leading)
 
                         HStack(alignment: .top) {
-                            // description
-                            TextCard(content: {
-                                if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
-                                    let game = games[idx]
-                                    // Game Description
-                                    if game.metadata["description"] != "" {
-                                        Text(game.metadata["description"] ?? "No game selected")
-                                            .font(.system(size: 14.5))
-                                            .lineSpacing(3.5)
-                                            .padding(10)
-                                    } else {
-                                        Text("No description found")
-                                            .font(.system(size: 14.5))
-                                            .lineSpacing(3.5)
-                                            .padding(10)
-                                    }
-                                }
-                            })
-                            .frame(idealWidth: 400, maxWidth: 550, maxHeight: .infinity, alignment: .topLeading) // controls the dimensions and alignment of the description text
-                            .padding(.trailing, 7.5)
+                            //description
                             VStack(alignment: .leading) {
+                                let game = getGameFromName(name: selectedGame ?? "")
+                                if game?.metadata["description"] != "" {
+                                    TextCard(text: game?.metadata["description"] ?? "No game selected")
+                                } else {
+                                    TextCard(text: "No description found.")
+                                }
+                            }
+                            .padding(.trailing, 7.5)
+                            
+                            SlotCard(content: {
                                 if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
                                     let game = games[idx]
                                     VStack(alignment: .leading, spacing: 7.5) {
-                                        VStack(alignment: .leading, spacing: 1) {
-                                            Text("Last Played")
-                                            Text(game.metadata["last_played"] ?? "Never")
-                                                .opacity(0.5)
-                                        }
-                                        VStack(alignment: .leading, spacing: 1) {
-                                            Text("Platform")
-                                            Text(game.platform.displayName)
-                                                .opacity(0.5)
-                                        }
-                                        VStack(alignment: .leading, spacing: 1) {
-                                            Text("Status")
-                                            Text(game.status.displayName)
-                                                .opacity(0.5)
-                                        }
-                                        if game.metadata["rating"] != "" {
-                                            VStack(alignment: .leading, spacing: 1) {
-                                                Text("Rating")
-                                                Text(game.metadata["rating"] ?? "")
-                                                    .opacity(0.5)
-                                            }
-                                        }
-                                        if game.metadata["genre"] != "" {
-                                            VStack(alignment: .leading, spacing: 1) {
-                                                Text("Genres")
-                                                Text(game.metadata["genre"] ?? "")
-                                                    .opacity(0.5)
-                                            }
-                                        }
-                                        if game.metadata["developer"] != "" {
-                                            VStack(alignment: .leading, spacing: 1) {
-                                                Text("Developer")
-                                                Text(game.metadata["developer"] ?? "")
-                                                    .opacity(0.5)
-                                            }
-                                        }
-                                        if game.metadata["publisher"] != "" {
-                                            VStack(alignment: .leading, spacing: 1) {
-                                                Text("Publisher")
-                                                Text(game.metadata["publisher"] ?? "")
-                                                    .opacity(0.5)
-                                            }
-                                        }
-                                        if game.metadata["release_date"] != "" {
-                                            VStack(alignment: .leading, spacing: 1) {
-                                                Text("Release Date")
-                                                Text(game.metadata["release_date"] ?? "")
-                                                    .opacity(0.5)
-                                            }
-                                        }
+                                        GameMetadata(field: "Last Played", value: game.metadata["last_played"] ?? "Never")
+                                        GameMetadata(field: "Platform", value: game.platform.displayName)
+                                        GameMetadata(field: "Status", value: game.status.displayName)
+                                        GameMetadata(field: "Rating", value: game.metadata["rating"] ?? "")
+                                        GameMetadata(field: "Genres", value: game.metadata["genre"] ?? "")
+                                        GameMetadata(field: "Developer", value: game.metadata["developer"] ?? "")
+                                        GameMetadata(field: "Publisher", value: game.metadata["publisher"] ?? "")
+                                        GameMetadata(field: "Release Date", value: game.metadata["release_date"] ?? "")
                                     }
                                     .padding(.trailing, 10)
                                     .frame(minWidth: 150, alignment: .leading)
                                 }
-                            }
-                            .font(.system(size: 14.5))
-                            .padding(10)
-                            .background(Color.gray.opacity(0.05))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 7.5)
-                                    .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
-                            )
-                            .cornerRadius(7.5)
+                            })
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                         .padding(.top, 10)
@@ -181,9 +122,8 @@ struct GameDetailView: View {
                 selectedGame = games[0].name
             }
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-                refreshGameDetailView()
-                refresh.toggle()
                 // This code will be executed every 1 second
+                refresh.toggle()
             }
         }
         .onDisappear {
@@ -196,21 +136,25 @@ struct GameDetailView: View {
             let game = games[idx!]
             playGame(game: game)
         }
+        .onChange(of: UserDefaults.standard.bool(forKey: "accentColorUI")) { _ in
+            refreshGameDetailView()
+        }
         .toast(isPresenting: $showSuccessToast, tapToDismiss: true) {
-            AlertToast(type: .complete(Color.green), title: "Game edited.")
+            AlertToast(type: .complete(Color.green), title: "Game Edited!")
         }
     }
     
     func refreshGameDetailView() {
         if UserDefaults.standard.bool(forKey: "accentColorUI") {
-            playColor = Color.accentColor
-            settingsColor = Color.accentColor.opacity(0.25)
-            settingsText = Color.accentColor
+            bgPlayColor = Color.accentColor
+            bgSettingsColor = Color.accentColor.opacity(0.25)
+            textSettingsColor = Color.accentColor
         } else {
-            playColor = Color.green
-            settingsColor = Color.gray.opacity(0.25)
-            settingsText = Color.primary
+            bgPlayColor = Color.green
+            bgSettingsColor = Color.gray.opacity(0.25)
+            textSettingsColor = Color.primary
         }
+        refresh.toggle()
     }
     
     func playGame(game: Game) {

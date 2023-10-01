@@ -7,6 +7,14 @@
 
 import Foundation
 
+func getGameFromName(name: String) -> Game? {
+    if let idx = games.firstIndex(where: { $0.name == name }) {
+        return games[idx]
+    } else {
+        return nil
+    }
+}
+
 func saveGame() {
     let encoder = JSONEncoder()
     encoder.outputFormatting = .prettyPrinted

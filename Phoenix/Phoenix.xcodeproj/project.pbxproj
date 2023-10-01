@@ -32,14 +32,15 @@
 		AD5287CE2AC00A1A001673F5 /* SlotInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287CD2AC00A1A001673F5 /* SlotInput.swift */; };
 		AD5287D02AC010AA001673F5 /* LargeTextBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287CF2AC010AA001673F5 /* LargeTextBox.swift */; };
 		AD5287D22AC016AD001673F5 /* DateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287D12AC016AD001673F5 /* DateUtils.swift */; };
-		AD5287D42AC01841001673F5 /* GameInputUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287D32AC01841001673F5 /* GameInputUtils.swift */; };
+		AD5287D42AC01841001673F5 /* GameUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287D32AC01841001673F5 /* GameUtils.swift */; };
 		AD5287D62AC018B8001673F5 /* HelpButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5287D52AC018B8001673F5 /* HelpButton.swift */; };
 		AD53FCBC2AC7E15D00D3A301 /* LargeToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD53FCBB2AC7E15D00D3A301 /* LargeToggleButton.swift */; };
 		AD53FCBE2AC7E39100D3A301 /* SmallToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD53FCBD2AC7E39100D3A301 /* SmallToggleButton.swift */; };
-		AD53FCC22AC7E57200D3A301 /* InfoCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD53FCC12AC7E57200D3A301 /* InfoCard.swift */; };
+		AD53FCC22AC7E57200D3A301 /* Cards.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD53FCC12AC7E57200D3A301 /* Cards.swift */; };
 		AD5E91A62AAE33CB008097C4 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = AD5E91A52AAE33CB008097C4 /* AlertToast */; };
 		AD92C4F62AAEBAF40058E1EA /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = AD92C4F52AAEBAF40058E1EA /* Kingfisher */; };
 		ADB72D5E2AC1359100299AC0 /* ChooseGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB72D5D2AC1359100299AC0 /* ChooseGameView.swift */; };
+		ADD4C7C82AC9CCE70052DFCB /* GameMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD4C7C72AC9CCE70052DFCB /* GameMetadata.swift */; };
 		B5B66A692A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */; };
 		CAFACC732A426262001C45C4 /* CheckForUpdatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFACC722A426262001C45C4 /* CheckForUpdatesView.swift */; };
 		CAFACC762A42638E001C45C4 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = CAFACC752A42638E001C45C4 /* Sparkle */; };
@@ -94,12 +95,13 @@
 		AD5287CD2AC00A1A001673F5 /* SlotInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotInput.swift; sourceTree = "<group>"; };
 		AD5287CF2AC010AA001673F5 /* LargeTextBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeTextBox.swift; sourceTree = "<group>"; };
 		AD5287D12AC016AD001673F5 /* DateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtils.swift; sourceTree = "<group>"; };
-		AD5287D32AC01841001673F5 /* GameInputUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameInputUtils.swift; sourceTree = "<group>"; };
+		AD5287D32AC01841001673F5 /* GameUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameUtils.swift; sourceTree = "<group>"; };
 		AD5287D52AC018B8001673F5 /* HelpButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpButton.swift; sourceTree = "<group>"; };
 		AD53FCBB2AC7E15D00D3A301 /* LargeToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeToggleButton.swift; sourceTree = "<group>"; };
 		AD53FCBD2AC7E39100D3A301 /* SmallToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallToggleButton.swift; sourceTree = "<group>"; };
-		AD53FCC12AC7E57200D3A301 /* InfoCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCard.swift; sourceTree = "<group>"; };
+		AD53FCC12AC7E57200D3A301 /* Cards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cards.swift; sourceTree = "<group>"; };
 		ADB72D5D2AC1359100299AC0 /* ChooseGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseGameView.swift; sourceTree = "<group>"; };
+		ADD4C7C72AC9CCE70052DFCB /* GameMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMetadata.swift; sourceTree = "<group>"; };
 		B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenGamesSettingsView.swift; sourceTree = "<group>"; };
 		CAFACC722A426262001C45C4 /* CheckForUpdatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckForUpdatesView.swift; sourceTree = "<group>"; };
 		CAFACC772A4263DB001C45C4 /* UpdaterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterViewModel.swift; sourceTree = "<group>"; };
@@ -254,7 +256,7 @@
 				0A20E1F02957FD4C00B7756E /* JsonUtils.swift */,
 				CAFAFAA82967600700B89003 /* LogUtils.swift */,
 				AD5287D12AC016AD001673F5 /* DateUtils.swift */,
-				AD5287D32AC01841001673F5 /* GameInputUtils.swift */,
+				AD5287D32AC01841001673F5 /* GameUtils.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -276,10 +278,11 @@
 		ADB4CF092AB537CA00BDF853 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				ADD4C7C62AC9CCD20052DFCB /* Misc */,
 				AD53FCC02AC7E52100D3A301 /* TextBoxes */,
 				AD53FCBF2AC7E50A00D3A301 /* Buttons */,
 				AD5287CD2AC00A1A001673F5 /* SlotInput.swift */,
-				AD53FCC12AC7E57200D3A301 /* InfoCard.swift */,
+				AD53FCC12AC7E57200D3A301 /* Cards.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -301,6 +304,14 @@
 				CAFACC722A426262001C45C4 /* CheckForUpdatesView.swift */,
 			);
 			path = Updates;
+			sourceTree = "<group>";
+		};
+		ADD4C7C62AC9CCD20052DFCB /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				ADD4C7C72AC9CCE70052DFCB /* GameMetadata.swift */,
+			);
+			path = Misc;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -455,6 +466,7 @@
 				0AF378672953AADD00978137 /* ContentView.swift in Sources */,
 				CAFACC782A4263DB001C45C4 /* UpdaterViewModel.swift in Sources */,
 				0A20E1E92957C52F00B7756E /* CmdUtils.swift in Sources */,
+				ADD4C7C82AC9CCE70052DFCB /* GameMetadata.swift in Sources */,
 				0AE9B6F82A3ADAD700800850 /* AppearanceSettingsView.swift in Sources */,
 				AD53FCBE2AC7E39100D3A301 /* SmallToggleButton.swift in Sources */,
 				0A02F8EC295BB92400FE29F4 /* GameInputView.swift in Sources */,
@@ -466,10 +478,10 @@
 				CAFACC732A426262001C45C4 /* CheckForUpdatesView.swift in Sources */,
 				0A20E1F12957FD4C00B7756E /* JsonUtils.swift in Sources */,
 				0AF378652953AADD00978137 /* PhoenixApp.swift in Sources */,
-				AD53FCC22AC7E57200D3A301 /* InfoCard.swift in Sources */,
+				AD53FCC22AC7E57200D3A301 /* Cards.swift in Sources */,
 				0A20E1EF2957E8B900B7756E /* Game.swift in Sources */,
 				AD53FCBC2AC7E15D00D3A301 /* LargeToggleButton.swift in Sources */,
-				AD5287D42AC01841001673F5 /* GameInputUtils.swift in Sources */,
+				AD5287D42AC01841001673F5 /* GameUtils.swift in Sources */,
 				AD5287CA2AC007CC001673F5 /* TextBox.swift in Sources */,
 				B5B66A692A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift in Sources */,
 				AD5287D62AC018B8001673F5 /* HelpButton.swift in Sources */,
