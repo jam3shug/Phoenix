@@ -18,7 +18,7 @@ struct ChooseGameView: View {
     
     var body: some View {
         VStack {
-            List(selection: $selectedGame) {
+            List(selection: $s  electedGame) {
                 ForEach(games.sorted { $0.id < $1.id }, id: \.self) { game in
                     HStack(spacing: 20) {
                         KFImage(URL(string: imageBuilder(imageID: game.cover.imageID, size: .COVER_BIG, imageType: .JPEG)))

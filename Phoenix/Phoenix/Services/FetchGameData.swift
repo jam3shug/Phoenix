@@ -13,9 +13,9 @@ import Kingfisher
 struct FetchGameData {
     let wrapper: IGDBWrapper = IGDBWrapper(clientID: "aqxuk3zeqtcuquwswjrbohyi2mf5gc", accessToken: "go5xcl37bz41a16plvnudbe6a4fajt")
     
-    func getGamesWithName(name: String, completion: @escaping ([Proto_Game]) -> Void) {
-        if let idx = games.firstIndex(where: { $0.name == name }) {
-            let game = games[idx]
+    func fetchGamesFromName(name: String, completion: @escaping ([Proto_Game]) -> Void) {
+        let game = getGameFromName(name: name)
+        if let game = game {
             // Create an APICalypse query to specify the search query and fields.
             if name != "" {
                 let apicalypse = APICalypse()

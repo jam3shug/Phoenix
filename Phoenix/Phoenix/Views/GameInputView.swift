@@ -92,7 +92,7 @@ struct GameInputView: View {
                     if !isNewGame {
                         Button (
                             action: {
-                                FetchGameData().getGamesWithName(name: nameInput) { gamesWithName in
+                                FetchGameData().fetchGamesFromName(name: nameInput) { gamesWithName in
                                     fetchedGames = gamesWithName
                                     showChooseGameView.toggle()
                                 }
@@ -125,7 +125,7 @@ struct GameInputView: View {
                                         games = games.sorted()
                                         saveGame()
                                         if UserDefaults.standard.bool(forKey: "isMetadataFetchingEnabled") {
-                                            FetchGameData().getGamesWithName(name: nameInput) { gamesWithName in
+                                            FetchGameData().fetchGamesFromName(name: nameInput) { gamesWithName in
                                                 fetchedGames = gamesWithName
                                                 showChooseGameView.toggle()
                                             }

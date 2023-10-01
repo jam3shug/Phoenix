@@ -34,9 +34,8 @@ struct GameDetailView: View {
     var body: some View {
         ScrollView {
             GeometryReader { geometry in
-                if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
-                    let game = games[idx]
-
+                let game = getGameFromName(name: selectedGame ?? "")
+                if let game = game {
                     // create header image
                     Image(nsImage: loadImageFromFile(filePath: (game.metadata["header_img"]?.replacingOccurrences(of: "\\", with: ":"))!))
                         .resizable()
@@ -48,8 +47,8 @@ struct GameDetailView: View {
                         .clipped()
                         .offset(x: 0, y: getOffsetForHeaderImage(geometry))
                 }
-            }.frame(height: 400)
-
+            }
+            .frame(height: 400)
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
@@ -89,8 +88,8 @@ struct GameDetailView: View {
                             .padding(.trailing, 7.5)
                             
                             SlotCard(content: {
-                                if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
-                                    let game = games[idx]
+                                let game = getGameFromName(name: selectedGame ?? "")
+                                if let game = game {
                                     VStack(alignment: .leading, spacing: 7.5) {
                                         GameMetadata(field: "Last Played", value: game.metadata["last_played"] ?? "Never")
                                         GameMetadata(field: "Platform", value: game.platform.displayName)
@@ -132,9 +131,10 @@ struct GameDetailView: View {
             timer = nil
         }
         .onChange(of: playingGame) { _ in
-            let idx = games.firstIndex(where: { $0.name == selectedGame })
-            let game = games[idx!]
-            playGame(game: game)
+            let game = getGameFromName(name: selectedGame ?? "")
+            if let game = game {
+                playGame(game: game)
+            }
         }
         .onChange(of: UserDefaults.standard.bool(forKey: "accentColorUI")) { _ in
             refreshGameDetailView()
