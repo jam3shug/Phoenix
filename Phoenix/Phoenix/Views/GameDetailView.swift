@@ -37,15 +37,17 @@ struct GameDetailView: View {
                 let game = getGameFromName(name: selectedGame ?? "")
                 if let game = game {
                     // create header image
-                    Image(nsImage: loadImageFromFile(filePath: (game.metadata["header_img"]?.replacingOccurrences(of: "\\", with: ":"))!))
-                        .resizable()
-                        .scaledToFill()
-                        .frame(
-                            width: geometry.size.width, height: getHeightForHeaderImage(geometry)
-                        )
-                        .blur(radius: getBlurRadiusForImage(geometry))
-                        .clipped()
-                        .offset(x: 0, y: getOffsetForHeaderImage(geometry))
+                    if let headerImage = game.metadata["header_img"] {
+                        Image(nsImage: loadImageFromFile(filePath: (headerImage.replacingOccurrences(of: "\\", with: ":"))))
+                            .resizable()
+                            .scaledToFill()
+                            .frame(
+                                width: geometry.size.width, height: getHeightForHeaderImage(geometry)
+                            )
+                            .blur(radius: getBlurRadiusForImage(geometry))
+                            .clipped()
+                            .offset(x: 0, y: getOffsetForHeaderImage(geometry))
+                    }
                 }
             }
             .frame(height: 400)
@@ -185,25 +187,10 @@ struct GameDetailView: View {
 
         // Update the value of "last_played" in the game's metadata
         let idx = games.firstIndex(where: { $0.name == selectedGame })
-        if idx != nil {
-            games[idx!].metadata["last_played"] = dateString
-            games[idx!].recency = .day
-
-            // Write the updated game information to the JSON file
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = .prettyPrinted
-
-            do {
-                let gamesJSON = try encoder.encode(games)
-
-                if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
-                    // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
-                    gamesJSONString = "{\"games\": \(gamesJSONString)}"
-                    writeGamesToJSON(data: gamesJSONString)
-                }
-            } catch {
-                logger.write(error.localizedDescription)
-            }
+        if let idx = idx {
+            games[idx].metadata["last_played"] = dateString
+            games[idx].recency = .day
+            saveGame()
         }
     }
 }
