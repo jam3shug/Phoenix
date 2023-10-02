@@ -52,6 +52,36 @@ struct FetchGameData {
                     }
                     if gamesWithName.count == 0 {
                         gamesWithName = fetchedGames
+                        if gamesWithName.count == 0 {
+                            apicalypse = APICalypse()
+                            .fields(fields: """
+                                            id,
+                                            name,
+                                            artworks,
+                                            cover,
+                                            cover.image_id,
+                                            artworks.image_id,
+                                            artworks.height,
+                                            storyline,
+                                            summary,
+                                            genres.name,
+                                            themes.name,
+                                            involved_companies.company.name,
+                                            involved_companies.publisher,
+                                            involved_companies.developer,
+                                            first_release_date,
+                                            websites.url,
+                                            websites.category
+                                            """) // Specify the fields you want to retrieve
+                            .where(query: "name ~ *\"\(name)\"* & (category = 0 | category = 2 | category = 3 | category = 8)") // Use the "where" clause to search by name
+                            .limit(value: 50)
+                            wrapper.games(apiCalypse: apicalypse, result: { fetchedGames in 
+                                gamesWithName = fetchedGames
+                            }) { error in
+                                // Handle any errors that occur during the request
+                                print("Error searching for the game: \(error)")
+                            }
+                        }
                     }
                     completion(gamesWithName)
                 }) { error in
