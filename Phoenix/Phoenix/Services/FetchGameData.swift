@@ -172,38 +172,33 @@ struct FetchGameData {
         let combinedGenresString = uniqueGenres.sorted().joined(separator: "\n")
         fetchedGame.metadata["genre"] = combinedGenresString
 
-        var developers = ""
-        var devCount = 0
-        var publishers = ""
-        var pubCount = 0
+        var developerSet = Set<String>()
+        var publisherSet = Set<String>()
 
         for company in igdbGame.involvedCompanies {
-            if company.publisher && pubCount <= 1 {
-                let publisherName = company.company.name
-                if !publishers.isEmpty {
-                    publishers += "\n"
-                }
-                publishers += publisherName
-                pubCount += 1
+            let companyName = company.company.name
+            
+            if company.publisher && publisherSet.count < 2 {
+                publisherSet.insert(companyName)
             }
-            if company.developer && devCount <= 1 {
-                let developerName = company.company.name
-                if !developers.isEmpty {
-                    developers += "\n"
-                }
-                developers += developerName
-                devCount += 1
+            
+            if company.developer && developerSet.count < 2 {
+                developerSet.insert(companyName)
             }
         }
 
+        let publishers = publisherSet.joined(separator: "\n")
+        let developers = developerSet.joined(separator: "\n")
+
         if !developers.isEmpty {
-            // Set the `developer` variable with newline-separated publishers
+            // Set the `developer` variable with newline-separated developers
             fetchedGame.metadata["developer"] = developers
         }
         if !publishers.isEmpty {
             // Set the `publisher` variable with newline-separated publishers
             fetchedGame.metadata["publisher"] = publishers
         }
+
 
         // Convert Unix timestamp to Date
         let date = Date(timeIntervalSince1970: TimeInterval(igdbGame.firstReleaseDate.seconds))
