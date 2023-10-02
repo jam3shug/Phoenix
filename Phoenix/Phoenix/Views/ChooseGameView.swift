@@ -14,7 +14,7 @@ struct ChooseGameView: View {
     
     @Binding var games: [Proto_Game]
     @State var selectedGame: Proto_Game?
-    @Binding var fetchedGame: Game?
+    var nameInput: String
     
     var body: some View {
         VStack {
@@ -42,7 +42,7 @@ struct ChooseGameView: View {
                     print("SAVEIJG")
                     if let selectedGame = selectedGame {
                         print("converting to igdb")
-                        FetchGameData().convertIGDBGame(igdbGame: selectedGame)
+                        FetchGameData().convertIGDBGame(igdbGame: selectedGame, nameInput: nameInput)
                     }
                     dismiss()
                 },

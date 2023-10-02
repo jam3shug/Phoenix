@@ -21,7 +21,6 @@ struct GameInputView: View {
     @State private var showChooseGameView: Bool = false
     
     @State var fetchedGames: [Proto_Game] = []
-    @State var fetchedGame: Game?
     
     @State private var nameInput: String = ""
     @State private var iconOutput: String = ""
@@ -161,15 +160,8 @@ struct GameInputView: View {
         .toast(isPresenting: $showDupeGameToast, tapToDismiss: true) { // Alert if game already exists with name
             AlertToast(type: .error(Color.red), title: "Game already exists with this name!")
         }
-        .sheet(isPresented: $showChooseGameView, onDismiss: {
-            if let fetchedGame = fetchedGame {
-                games.append(fetchedGame)
-                games = games.sorted()
-                saveGame()
-                dismiss()
-            }
-        }, content: {
-            ChooseGameView(games: $fetchedGames, fetchedGame: $fetchedGame)
+        .sheet(isPresented: $showChooseGameView, onDismiss: { dismiss() }, content: {
+            ChooseGameView(games: $fetchedGames, nameInput: nameInput)
         })
         .onAppear() {
             if !isNewGame {

@@ -62,10 +62,10 @@ struct FetchGameData {
         }
     }
     
-    func convertIGDBGame(igdbGame: Proto_Game) {
+    func convertIGDBGame(igdbGame: Proto_Game, nameInput: String) {
         var fetchedGame: Game = .init()
         
-        fetchedGame.name = igdbGame.name
+        fetchedGame.name = nameInput
         
         fetchedGame.igdbID = String(igdbGame.id)
 
@@ -79,7 +79,7 @@ struct FetchGameData {
         for website in igdbGame.websites {
             if website.category.rawValue == 13 {
                 // Split the URL string by forward slash and get the last component
-                if let lastPathComponent = website.url.split(separator: "/").last {
+                if let lastPathComponent = website.url.split(separator: "/").firstIndex(of: "app").flatMap({ $0 + 1 < website.url.split(separator: "/").count ? website.url.split(separator: "/")[$0 + 1] : nil }) {
                     if let number = Int(lastPathComponent) {
                         fetchedGame.steamID = String(number)
                         getSteamHeader(number: number, name: igdbGame.name) { headerImage in
@@ -188,7 +188,7 @@ struct FetchGameData {
     
     func getSteamHeader(number: Int, name: String, completion: @escaping (String?) -> Void) {
         let imageURL = "https://cdn.cloudflare.steamstatic.com/steam/apps/\(number)/library_hero.jpg"
-        if let url = URL(string: imageURL) {
+        if let url = URL(string: imageURL) {	
             URLSession.shared.dataTask(with: url) { headerData, response, error in
                 if let error = error {
                     print("Failed to fetch image: \(error.localizedDescription)")
