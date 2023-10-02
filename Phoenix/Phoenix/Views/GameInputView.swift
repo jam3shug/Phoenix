@@ -65,7 +65,7 @@ struct GameInputView: View {
                     
                     TextBox(textBoxName: "Command", placeholder: "Enter terminal command to launch game", input: $cmdInput)
                 }
-                DisclosureGroup("Metadata (automatically fetched by default)") {
+                DisclosureGroup("Advanced") {
                     VStack(alignment: .leading) {
                         LargeTextBox(textBoxName: "Description", input: $descInput)
                         
@@ -130,10 +130,10 @@ struct GameInputView: View {
                                                 showChooseGameView.toggle()
                                             }
                                         }
-                                        //                                showSuccessToast = true
-                                        //                                dismiss()
-                                    }
-                                }
+//                                                                        showSuccessToast = true
+//                                                                        dismiss()
+                                    }                                }
+
                             } else {
                                 let idx = games.firstIndex(where: { $0.name == nameInput })
                                 games[idx!] = game
@@ -166,10 +166,10 @@ struct GameInputView: View {
                 games.append(fetchedGame)
                 games = games.sorted()
                 saveGame()
+                dismiss()
             }
         }, content: {
             ChooseGameView(games: $fetchedGames, fetchedGame: $fetchedGame)
-                .frame()
         })
         .onAppear() {
             if !isNewGame {

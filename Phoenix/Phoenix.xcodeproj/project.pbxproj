@@ -267,10 +267,10 @@
 				0A87BBB4295D7B1A0009AF47 /* GameDetailView.swift */,
 				0A02F8EB295BB92400FE29F4 /* GameInputView.swift */,
 				0A87BBB0295D57C30009AF47 /* GameListView.swift */,
+				ADB72D5D2AC1359100299AC0 /* ChooseGameView.swift */,
 				ADB4CF092AB537CA00BDF853 /* Components */,
 				ADB4CF0A2AB537DC00BDF853 /* Settings */,
 				ADB4CF0B2AB5385600BDF853 /* Updates */,
-				ADB72D5D2AC1359100299AC0 /* ChooseGameView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";

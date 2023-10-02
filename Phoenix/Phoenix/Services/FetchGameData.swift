@@ -62,27 +62,10 @@ struct FetchGameData {
         }
     }
     
-    func convertIGDBGame(igdbGame: Proto_Game, userGame: Game) {
-        var fetchedGame: Game = .init(
-            launcher: userGame.launcher,
-            metadata: [
-                "description": userGame.metadata["description"] ?? "",
-                "header_img": userGame.metadata["header_img"] ?? "",
-                "last_played": userGame.metadata["last_played"] ?? "Never",
-                "rating": userGame.metadata["rating"] ?? "",
-                "genre": userGame.metadata["genre"] ?? "",
-                "developer": userGame.metadata["developer"] ?? "",
-                "publisher": userGame.metadata["publisher"] ?? "",
-                "release_date": userGame.metadata["release_date"] ?? "",
-            ],
-            icon: userGame.icon,
-            name: userGame.name,
-            platform: userGame.platform,
-            status: userGame.status,
-            recency: userGame.recency,
-            is_deleted: userGame.is_deleted,
-            is_favorite: userGame.is_favorite
-        )
+    func convertIGDBGame(igdbGame: Proto_Game) {
+        var fetchedGame: Game = .init()
+        
+        fetchedGame.name = igdbGame.name
         
         fetchedGame.igdbID = String(igdbGame.id)
 
@@ -102,7 +85,7 @@ struct FetchGameData {
                         getSteamHeader(number: number, name: igdbGame.name) { headerImage in
                             if let headerImage = headerImage {
                                 fetchedGame.metadata["header_img"] = headerImage
-                                saveGame(name: igdbGame.name, fetchedGame: fetchedGame)
+                                saveFetchedGame(name: igdbGame.name, fetchedGame: fetchedGame)
                             } else {
                                 print("steam is on something")
                             }
@@ -117,7 +100,7 @@ struct FetchGameData {
                 getIGDBHeader(igdbGame: igdbGame, name: igdbGame.name) { headerImage in
                     if let headerImage = headerImage {
                         fetchedGame.metadata["header_img"] = headerImage
-                        saveGame(name: igdbGame.name, fetchedGame: fetchedGame)
+                        saveFetchedGame(name: fetchedGame.name, fetchedGame: fetchedGame)
                     }
                 }
             }
@@ -200,7 +183,7 @@ struct FetchGameData {
 
         fetchedGame.metadata["release_date"] = dateFormatter.string(from: date)
 
-        saveGame(name: igdbGame.name, fetchedGame: fetchedGame)
+        saveFetchedGame(name: fetchedGame.name, fetchedGame: fetchedGame)
     }
     
     func getSteamHeader(number: Int, name: String, completion: @escaping (String?) -> Void) {
@@ -295,23 +278,11 @@ struct FetchGameData {
         }
     }
     
-    func saveGame(name: String, fetchedGame: Game) {
-        let idx = games.firstIndex(where: { $0.name == name })
-        games[idx!] = fetchedGame
-       
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-       
-        do {
-            let gamesJSON = try JSONEncoder().encode(games)
-           
-            if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
-                // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
-                gamesJSONString = "{\"games\": \(gamesJSONString)}"
-                writeGamesToJSON(data: gamesJSONString)
-            }
-        } catch {
-           logger.write(error.localizedDescription)
+    func saveFetchedGame(name: String, fetchedGame: Game) {
+        if let idx = games.firstIndex(where: { $0.name == fetchedGame.name }) {
+            games[idx] = fetchedGame
+            print(fetchedGame, games[idx])
         }
+        saveGame()
     }
 }

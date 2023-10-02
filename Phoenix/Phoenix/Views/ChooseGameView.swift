@@ -39,8 +39,10 @@ struct ChooseGameView: View {
             }
             Button(
                 action: {
-                    if let selectedGame = selectedGame, let fetchedGame = fetchedGame {
-                        FetchGameData().convertIGDBGame(igdbGame: selectedGame, userGame: fetchedGame)
+                    print("SAVEIJG")
+                    if let selectedGame = selectedGame {
+                        print("converting to igdb")
+                        FetchGameData().convertIGDBGame(igdbGame: selectedGame)
                     }
                     dismiss()
                 },
