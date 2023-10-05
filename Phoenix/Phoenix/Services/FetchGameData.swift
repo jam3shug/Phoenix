@@ -14,11 +14,9 @@ struct FetchGameData {
     let wrapper: IGDBWrapper = IGDBWrapper(clientID: "aqxuk3zeqtcuquwswjrbohyi2mf5gc", accessToken: "go5xcl37bz41a16plvnudbe6a4fajt")
     
     func fetchGamesFromName(name: String, completion: @escaping ([Proto_Game]) -> Void) {
-        let game = getGameFromName(name: name)
-        if let game = game {
             // Create an APICalypse query to specify the search query and fields.
             if name != "" {
-                let apicalypse = APICalypse()
+                var apicalypse = APICalypse()
                     .fields(fields: """
                                     id,
                                     name,
@@ -38,58 +36,18 @@ struct FetchGameData {
                                     websites.url,
                                     websites.category
                                     """) // Specify the fields you want to retrieve
-                    .where(query: "name ~ \"\(name)\" & (category = 0 | category = 2 | category = 3 | category = 8)") // Use the "where" clause to search by name
+                    .where(query: "name ~ \"\(name)\"") // Use the "where" clause to search by name
                     .limit(value: 50)
                 
                 // Make the API request to search for the game by name.
                 wrapper.games(apiCalypse: apicalypse, result: { fetchedGames in
                     var gamesWithName: [Proto_Game] = []
-                    // Handle the retrieved games here
-                    for i in fetchedGames {
-                        if i.name == name {
-                            gamesWithName.append(i)
-                        }
-                    }
-                    if gamesWithName.count == 0 {
-                        gamesWithName = fetchedGames
-                        if gamesWithName.count == 0 {
-                            apicalypse = APICalypse()
-                            .fields(fields: """
-                                            id,
-                                            name,
-                                            artworks,
-                                            cover,
-                                            cover.image_id,
-                                            artworks.image_id,
-                                            artworks.height,
-                                            storyline,
-                                            summary,
-                                            genres.name,
-                                            themes.name,
-                                            involved_companies.company.name,
-                                            involved_companies.publisher,
-                                            involved_companies.developer,
-                                            first_release_date,
-                                            websites.url,
-                                            websites.category
-                                            """) // Specify the fields you want to retrieve
-                            .where(query: "name ~ *\"\(name)\"* & (category = 0 | category = 2 | category = 3 | category = 8)") // Use the "where" clause to search by name
-                            .limit(value: 50)
-                            wrapper.games(apiCalypse: apicalypse, result: { fetchedGames in 
-                                gamesWithName = fetchedGames
-                            }) { error in
-                                // Handle any errors that occur during the request
-                                print("Error searching for the game: \(error)")
-                            }
-                        }
-                    }
                     completion(gamesWithName)
                 }) { error in
                     // Handle any errors that occur during the request
                     print("Error searching for the game: \(error)")
                 }
             }
-        }
     }
     
     func convertIGDBGame(igdbGame: Proto_Game, nameInput: String) {
@@ -208,6 +166,7 @@ struct FetchGameData {
 
         fetchedGame.metadata["release_date"] = dateFormatter.string(from: date)
 
+        print("saving")
         saveFetchedGame(name: fetchedGame.name, fetchedGame: fetchedGame)
     }
     
@@ -304,10 +263,7 @@ struct FetchGameData {
     }
     
     func saveFetchedGame(name: String, fetchedGame: Game) {
-        if let idx = games.firstIndex(where: { $0.name == fetchedGame.name }) {
-            games[idx] = fetchedGame
-            print(fetchedGame, games[idx])
-        }
+        
         saveGame()
     }
 }

@@ -16,7 +16,7 @@ struct GameInputView: View {
     var gameName: String
     
     @Binding var showSuccessToast: Bool
-    @State private var showDupeGameToast = false
+    @State private var showErrorToast = false
     
     @State private var showChooseGameView: Bool = false
     
@@ -106,40 +106,19 @@ struct GameInputView: View {
                             let game: Game = .init(
                                 launcher: cmdInput, metadata: ["description": descInput, "header_img": headOutput, "rating": rateInput, "genre": genreInput, "developer": devInput, "publisher": pubInput, "release_date": convertIntoString(input: dateInput)], icon: iconOutput, name: nameInput, platform: platInput, status: statusInput
                             )
-                            if isNewGame {
-                                let dispatchGroup = DispatchGroup()
-                                for i in games {
-                                    dispatchGroup.enter()
-                                    defer {
-                                        dispatchGroup.leave()
-                                    }
-                                    if i.name == game.name {
-                                        showDupeGameToast = true
-                                    }
+                            if UserDefaults.standard.bool(forKey: "isMetadataFetchingEnabled") {
+                                FetchGameData().fetchGamesFromName(name: game.name) { gamesWithName in
+                                    fetchedGames = gamesWithName
+                                    showChooseGameView.toggle()
                                 }
                                 
-                                dispatchGroup.notify(queue: .main) { // once for loop is over
-                                    if !showDupeGameToast { // if no games are dupes
-                                        games.append(game)
-                                        games = games.sorted()
-                                        saveGame()
-                                        if UserDefaults.standard.bool(forKey: "isMetadataFetchingEnabled") {
-                                            FetchGameData().fetchGamesFromName(name: nameInput) { gamesWithName in
-                                                fetchedGames = gamesWithName
-                                                showChooseGameView.toggle()
-                                            }
-                                        }
-//                                                                        showSuccessToast = true
-//                                                                        dismiss()
-                                    }                                }
-
                             } else {
-                                let idx = games.firstIndex(where: { $0.name == nameInput })
-                                games[idx!] = game
+                                games.append(game)
+                                games = games.sorted()
                                 saveGame()
-                                showSuccessToast = true
-                                dismiss()
                             }
+//                            showSuccessToast = true
+//                            dismiss()
                         },
                         label: {
                             Text("Save Game")
@@ -157,7 +136,7 @@ struct GameInputView: View {
             }
         }
         .frame(minWidth: 768, maxWidth: 1024, maxHeight: 2000)
-        .toast(isPresenting: $showDupeGameToast, tapToDismiss: true) { // Alert if game already exists with name
+        .toast(isPresenting: $showErrorToast, tapToDismiss: true) { // Alert if game already exists with name
             AlertToast(type: .error(Color.red), title: "Game already exists with this name!")
         }
         .sheet(isPresented: $showChooseGameView, onDismiss: { dismiss() }, content: {
