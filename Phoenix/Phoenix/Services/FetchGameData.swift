@@ -16,7 +16,7 @@ struct FetchGameData {
     func fetchGamesFromName(name: String, completion: @escaping ([Proto_Game]) -> Void) {
             // Create an APICalypse query to specify the search query and fields.
             if name != "" {
-                var apicalypse = APICalypse()
+                let apicalypse = APICalypse()
                     .fields(fields: """
                                     id,
                                     name,
@@ -41,8 +41,7 @@ struct FetchGameData {
                 
                 // Make the API request to search for the game by name.
                 wrapper.games(apiCalypse: apicalypse, result: { fetchedGames in
-                    var gamesWithName: [Proto_Game] = []
-                    completion(gamesWithName)
+                    completion(fetchedGames)
                 }) { error in
                     // Handle any errors that occur during the request
                     print("Error searching for the game: \(error)")
@@ -51,7 +50,19 @@ struct FetchGameData {
     }
     
     func convertIGDBGame(igdbGame: Proto_Game, nameInput: String) {
-        var fetchedGame: Game = .init()
+        guard let idx = games.firstIndex(where: { $0.name == nameInput }) else { return }
+        var fetchedGame: Game = .init(
+            steamID: games[idx].steamID,
+            launcher: games[idx].launcher,
+            metadata: [
+                "rating": games[idx].metadata["rating"] ?? "",
+            ],
+            icon: games[idx].icon,
+            platform: games[idx].platform,
+            status: games[idx].status,
+            recency: games[idx].recency,
+            is_favorite: games[idx].is_favorite
+        )
         
         fetchedGame.name = nameInput
         
@@ -263,7 +274,9 @@ struct FetchGameData {
     }
     
     func saveFetchedGame(name: String, fetchedGame: Game) {
-        
-        saveGame()
+        if let idx = games.firstIndex(where: { $0.name == name }) {
+            games[idx] = fetchedGame
+        }
+        saveGames()
     }
 }

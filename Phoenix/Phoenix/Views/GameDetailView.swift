@@ -163,7 +163,7 @@ struct GameDetailView: View {
         do {
             let currentDate = Date()
             // Update the last played date and write the updated information to the JSON file
-            updateLastPlayedDate(currentDate: currentDate, games: &games)
+            updateLastPlayedDate(currentDate: currentDate)
             if game.launcher != "" {
                 try shell(game)
             } else {
@@ -175,7 +175,7 @@ struct GameDetailView: View {
         
     }
 
-    func updateLastPlayedDate(currentDate: Date, games: inout [Game]) {
+    func updateLastPlayedDate(currentDate: Date) {
         let dateFormatter: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateStyle = .long
@@ -186,11 +186,10 @@ struct GameDetailView: View {
         let dateString = dateFormatter.string(from: currentDate)
 
         // Update the value of "last_played" in the game's metadata
-        let idx = games.firstIndex(where: { $0.name == selectedGame })
-        if let idx = idx {
+        if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
             games[idx].metadata["last_played"] = dateString
             games[idx].recency = .day
-            saveGame()
+            saveGames()
         }
     }
 }

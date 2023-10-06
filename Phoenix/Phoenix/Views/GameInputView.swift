@@ -91,6 +91,13 @@ struct GameInputView: View {
                     if !isNewGame {
                         Button (
                             action: {
+                                let game: Game = .init(
+                                    launcher: cmdInput, metadata: ["description": descInput, "header_img": headOutput, "rating": rateInput, "genre": genreInput, "developer": devInput, "publisher": pubInput, "release_date": convertIntoString(input: dateInput)], icon: iconOutput, name: nameInput, platform: platInput, status: statusInput
+                                )
+                                if let idx = games.firstIndex(where: { $0.name == gameName }) {
+                                    games[idx] = game
+                                    saveGames()
+                                }
                                 FetchGameData().fetchGamesFromName(name: nameInput) { gamesWithName in
                                     fetchedGames = gamesWithName
                                     showChooseGameView.toggle()
@@ -106,19 +113,25 @@ struct GameInputView: View {
                             let game: Game = .init(
                                 launcher: cmdInput, metadata: ["description": descInput, "header_img": headOutput, "rating": rateInput, "genre": genreInput, "developer": devInput, "publisher": pubInput, "release_date": convertIntoString(input: dateInput)], icon: iconOutput, name: nameInput, platform: platInput, status: statusInput
                             )
-                            if UserDefaults.standard.bool(forKey: "isMetadataFetchingEnabled") {
-                                FetchGameData().fetchGamesFromName(name: game.name) { gamesWithName in
-                                    fetchedGames = gamesWithName
-                                    showChooseGameView.toggle()
+                            if isNewGame {
+                                if UserDefaults.standard.bool(forKey: "isMetadataFetchingEnabled") {
+                                    FetchGameData().fetchGamesFromName(name: game.name) { gamesWithName in
+                                        fetchedGames = gamesWithName
+                                        games.append(game)
+                                        saveGames()
+                                        showChooseGameView.toggle()
+                                    }
                                 }
-                                
                             } else {
-                                games.append(game)
-                                games = games.sorted()
-                                saveGame()
+                                if let idx = games.firstIndex(where: { $0.name == gameName }) {
+                                    games[idx] = game
+                                    saveGames()
+                                    showSuccessToast = true
+                                } else {
+                                    showErrorToast = true
+                                }
+                                dismiss()
                             }
-//                            showSuccessToast = true
-//                            dismiss()
                         },
                         label: {
                             Text("Save Game")
@@ -137,15 +150,14 @@ struct GameInputView: View {
         }
         .frame(minWidth: 768, maxWidth: 1024, maxHeight: 2000)
         .toast(isPresenting: $showErrorToast, tapToDismiss: true) { // Alert if game already exists with name
-            AlertToast(type: .error(Color.red), title: "Game already exists with this name!")
+            AlertToast(type: .error(Color.red), title: "Game couldn't be saved.")
         }
         .sheet(isPresented: $showChooseGameView, onDismiss: { dismiss() }, content: {
             ChooseGameView(games: $fetchedGames, nameInput: nameInput)
         })
         .onAppear() {
-            if !isNewGame {
-                let idx = games.firstIndex(where: { $0.name == gameName })
-                let currentGame = games[idx!]
+            if !isNewGame, let idx = games.firstIndex(where: { $0.name == gameName }) {
+                let currentGame = games[idx]
                 nameInput = currentGame.name
                 iconOutput = currentGame.icon
                 platInput = currentGame.platform
