@@ -77,14 +77,17 @@ struct FetchGameData {
         // Get the highest resolution artwork
         for website in igdbGame.websites {
             if website.category.rawValue == 13 {
+                print("STEAM FOUND")
                 // Split the URL string by forward slash and get the last component
                 if let lastPathComponent = website.url.split(separator: "/").firstIndex(of: "app").flatMap({ $0 + 1 < website.url.split(separator: "/").count ? website.url.split(separator: "/")[$0 + 1] : nil }) {
+                    print("SHOULD WORK")
+                    print(website.url)
+                    print(lastPathComponent)
                     if let number = Int(lastPathComponent) {
                         fetchedGame.steamID = String(number)
                         getSteamHeader(number: number, name: igdbGame.name) { headerImage in
                             if let headerImage = headerImage {
                                 fetchedGame.metadata["header_img"] = headerImage
-                                saveFetchedGame(name: igdbGame.name, fetchedGame: fetchedGame)
                             } else {
                                 print("steam is on something")
                             }
@@ -94,13 +97,6 @@ struct FetchGameData {
                     }
                 } else {
                     logger.write("Invalid URL format.")
-                }
-            } else {
-                getIGDBHeader(igdbGame: igdbGame, name: igdbGame.name) { headerImage in
-                    if let headerImage = headerImage {
-                        fetchedGame.metadata["header_img"] = headerImage
-                        saveFetchedGame(name: fetchedGame.name, fetchedGame: fetchedGame)
-                    }
                 }
             }
         }
@@ -185,91 +181,12 @@ struct FetchGameData {
         let imageURL = "https://cdn.cloudflare.steamstatic.com/steam/apps/\(number)/library_hero.jpg"
         if let url = URL(string: imageURL) {	
             URLSession.shared.dataTask(with: url) { headerData, response, error in
-                if let error = error {
-                    print("Failed to fetch image: \(error.localizedDescription)")
-                    // Handle the error (e.g., show an error message to the user)
-                    return
-                }
-                let fileManager = FileManager.default
-                guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
-                    fatalError("Unable to retrieve application support directory URL")
-                }
-                
-                let cachedImagesDirectoryPath = appSupportURL.appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
-                
-                if !fileManager.fileExists(atPath: cachedImagesDirectoryPath.path) {
-                    do {
-                        try fileManager.createDirectory(at: cachedImagesDirectoryPath, withIntermediateDirectories: true, attributes: nil)
-                        print("Created 'Phoenix/cachedImages' directory")
-                    } catch {
-                        fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
+                if let headerData = headerData {
+                    saveHeaderToFile(headerData: headerData, name: name) { headerImage in
+                        completion(headerImage)
                     }
-                }
-                
-                var destinationURL: URL
-                
-                if url.pathExtension.lowercased() == "jpg" || url.pathExtension.lowercased() == "jpeg" {
-                    destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_header.jpg")
-                } else {
-                    destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_header.png")
-                }
-                
-                do {
-                    try headerData?.write(to: destinationURL)
-                    let headerImage = destinationURL.relativeString
-                    completion(headerImage)
-                    print("Saved image to: \(destinationURL.path)")
-                } catch {
-                    print("Failed to save image: \(error.localizedDescription)")
                 }
             }.resume()
-        }
-    }
-    
-    func getIGDBHeader(igdbGame: Proto_Game, name: String, completion: @escaping (String?) -> Void) {
-        if let highestResArtwork = igdbGame.artworks.max(by: { $0.height < $1.height }) {
-            let imageURL = imageBuilder(imageID: highestResArtwork.imageID, size: .FHD, imageType: .JPEG)
-            if let url = URL(string: imageURL) {
-                URLSession.shared.dataTask(with: url) { headerData, response, error in
-                    if let error = error {
-                        print("Failed to fetch image: \(error.localizedDescription)")
-                        // Handle the error (e.g., show an error message to the user)
-                        return
-                    }
-                    let fileManager = FileManager.default
-                    guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
-                        fatalError("Unable to retrieve application support directory URL")
-                    }
-                    
-                    let cachedImagesDirectoryPath = appSupportURL.appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
-                    
-                    if !fileManager.fileExists(atPath: cachedImagesDirectoryPath.path) {
-                        do {
-                            try fileManager.createDirectory(at: cachedImagesDirectoryPath, withIntermediateDirectories: true, attributes: nil)
-                            print("Created 'Phoenix/cachedImages' directory")
-                        } catch {
-                            fatalError("Failed to create 'Phoenix/cachedImages' directory: \(error.localizedDescription)")
-                        }
-                    }
-                    
-                    var destinationURL: URL
-                    
-                    if url.pathExtension.lowercased() == "jpg" || url.pathExtension.lowercased() == "jpeg" {
-                        destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_header.jpg")
-                    } else {
-                        destinationURL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_header.png")
-                    }
-                    
-                    do {
-                        try headerData?.write(to: destinationURL)
-                        let headerImage = destinationURL.relativeString
-                        completion(headerImage)
-                        print("Saved image to: \(destinationURL.path)")
-                    } catch {
-                        print("Failed to save image: \(error.localizedDescription)")
-                    }
-                }.resume()
-            }
         }
     }
     
