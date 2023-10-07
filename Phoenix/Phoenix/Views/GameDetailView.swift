@@ -71,7 +71,7 @@ struct GameDetailView: View {
                                     refresh.toggle()
                                 },
                                 content: {
-                                    GameInputView(isNewGame: false, gameName: selectedGame ?? "", showSuccessToast: $showSuccessToast)
+                                    GameInputView(isNewGame: false, selectedGame: $selectedGame, showSuccessToast: $showSuccessToast)
                                 }
                             )
                         } // hstack

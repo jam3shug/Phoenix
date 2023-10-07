@@ -13,7 +13,7 @@ struct GameInputView: View {
     @Environment(\.dismiss) private var dismiss
     
     var isNewGame: Bool
-    var gameName: String
+    @Binding var selectedGame: String?
     
     @Binding var showSuccessToast: Bool
     @State private var showErrorToast = false
@@ -44,7 +44,7 @@ struct GameInputView: View {
                 Group {
                     TextBox(textBoxName: "Name", placeholder: "Enter game name", input: $nameInput) // Name input
                     
-                    ImageImportButton(type: "Icon", isImporting: $iconIsImporting, output: $iconOutput, gameName: nameInput) 
+                    ImageImportButton(type: "Icon", isImporting: $iconIsImporting, output: $iconOutput, gameName: nameInput)
         
                     SlotInput(contentName: "Platform", content: {
                         Picker("", selection: $platInput) {
@@ -94,9 +94,10 @@ struct GameInputView: View {
                                 let game: Game = .init(
                                     launcher: cmdInput, metadata: ["description": descInput, "header_img": headOutput, "rating": rateInput, "genre": genreInput, "developer": devInput, "publisher": pubInput, "release_date": convertIntoString(input: dateInput)], icon: iconOutput, name: nameInput, platform: platInput, status: statusInput
                                 )
-                                if let idx = games.firstIndex(where: { $0.name == gameName }) {
+                                if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
                                     games[idx] = game
                                     saveGames()
+                                    selectedGame = game.name
                                 }
                                 FetchGameData().fetchGamesFromName(name: nameInput) { gamesWithName in
                                     fetchedGames = gamesWithName
@@ -123,9 +124,10 @@ struct GameInputView: View {
                                     }
                                 }
                             } else {
-                                if let idx = games.firstIndex(where: { $0.name == gameName }) {
+                                if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
                                     games[idx] = game
                                     saveGames()
+                                    selectedGame = game.name
                                     showSuccessToast = true
                                 } else {
                                     showErrorToast = true
@@ -156,7 +158,7 @@ struct GameInputView: View {
             ChooseGameView(games: $fetchedGames, nameInput: nameInput)
         })
         .onAppear() {
-            if !isNewGame, let idx = games.firstIndex(where: { $0.name == gameName }) {
+            if !isNewGame, let idx = games.firstIndex(where: { $0.name == selectedGame }) {
                 let currentGame = games[idx]
                 nameInput = currentGame.name
                 iconOutput = currentGame.icon
