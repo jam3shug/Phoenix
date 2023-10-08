@@ -18,7 +18,7 @@ struct GameDetailView: View {
     
     @State private var timer: Timer?
 
-    // initialize colors
+    
     @State var bgPlayColor = Color.green
     @State var bgSettingsColor = Color.gray.opacity(0.1)
     @State var textPlayColor = Color.white
