@@ -77,10 +77,8 @@ struct FetchGameData {
         // Get the highest resolution artwork
         for website in igdbGame.websites {
             if website.category.rawValue == 13 {
-                print("STEAM FOUND")
                 // Split the URL string by forward slash and get the last component
                 if let lastPathComponent = website.url.split(separator: "/").firstIndex(of: "app").flatMap({ $0 + 1 < website.url.split(separator: "/").count ? website.url.split(separator: "/")[$0 + 1] : nil }) {
-                    print("SHOULD WORK")
                     print(website.url)
                     print(lastPathComponent)
                     if let number = Int(lastPathComponent) {
