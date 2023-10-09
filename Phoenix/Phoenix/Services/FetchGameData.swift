@@ -198,7 +198,7 @@ struct FetchGameData {
     }
     
     func getIGDBHeader(igdbGame: Proto_Game, name: String, completion: @escaping (String?) -> Void) {
-        if let highestResArtwork = igdbGame.artworks.max(by: { $0.height < $1.height }) {
+        if let highestResArtwork = igdbGame.artworks.max(by: { $0.width < $1.width }) {
             let imageURL = imageBuilder(imageID: highestResArtwork.imageID, size: .FHD, imageType: .JPEG)
             if let url = URL(string: imageURL) {
                 URLSession.shared.dataTask(with: url) { headerData, response, error in
