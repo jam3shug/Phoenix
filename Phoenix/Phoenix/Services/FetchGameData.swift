@@ -88,6 +88,7 @@ struct FetchGameData {
                         getSteamHeader(number: number, name: igdbGame.name) { headerImage in
                             if let headerImage = headerImage {
                                 fetchedGame.metadata["header_img"] = headerImage
+                                saveFetchedGame(name: fetchedGame.name, fetchedGame: fetchedGame)
                             } else {
                                 print("steam is on something")
                             }
@@ -173,7 +174,6 @@ struct FetchGameData {
 
         fetchedGame.metadata["release_date"] = dateFormatter.string(from: date)
 
-        print("saving")
         saveFetchedGame(name: fetchedGame.name, fetchedGame: fetchedGame)
     }
     
