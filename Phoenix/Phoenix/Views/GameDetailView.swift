@@ -18,18 +18,10 @@ struct GameDetailView: View {
     
     @State private var timer: Timer?
 
-    
     @State var bgPlayColor = Color.green
     @State var bgSettingsColor = Color.gray.opacity(0.1)
     @State var textPlayColor = Color.white
     @State var textSettingsColor = Color.primary
-
-    init(selectedGame: Binding<String?>, refresh: Binding<Bool>, editingGame: Binding<Bool>, playingGame: Binding<Bool>) {
-        _selectedGame = selectedGame
-        _refresh = refresh
-        _editingGame = editingGame
-        _playingGame = playingGame
-    }
 
     var body: some View {
         ScrollView {
