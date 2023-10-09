@@ -99,6 +99,13 @@ struct FetchGameData {
                 } else {
                     logger.write("Invalid URL format.")
                 }
+            } else {
+                getIGDBHeader(igdbGame: igdbGame, name: igdbGame.name) { headerImage in
+                    if let headerImage = headerImage {
+                        fetchedGame.metadata["header_img"] = headerImage
+                        saveFetchedGame(name: fetchedGame.name, fetchedGame: fetchedGame)
+                    }
+                }
             }
         }
 
@@ -187,6 +194,21 @@ struct FetchGameData {
                     }
                 }
             }.resume()
+        }
+    }
+    
+    func getIGDBHeader(igdbGame: Proto_Game, name: String, completion: @escaping (String?) -> Void) {
+        if let highestResArtwork = igdbGame.artworks.max(by: { $0.height < $1.height }) {
+            let imageURL = imageBuilder(imageID: highestResArtwork.imageID, size: .FHD, imageType: .JPEG)
+            if let url = URL(string: imageURL) {
+                URLSession.shared.dataTask(with: url) { headerData, response, error in
+                    if let headerData = headerData {
+                        saveHeaderToFile(headerData: headerData, name: name) { headerImage in
+                            completion(headerImage)
+                        }
+                    }
+                }.resume()
+            }
         }
     }
     
