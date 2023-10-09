@@ -161,7 +161,6 @@ struct GameInputView: View {
             if !isNewGame, let idx = games.firstIndex(where: { $0.name == selectedGame }) {
                 let currentGame = games[idx]
                 nameInput = currentGame.name
-                iconOutput = currentGame.icon
                 platInput = currentGame.platform
                 statusInput = currentGame.status
                 cmdInput = currentGame.launcher
