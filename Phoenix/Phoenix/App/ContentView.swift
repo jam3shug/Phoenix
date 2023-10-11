@@ -24,7 +24,7 @@ struct ContentView: View {
     @Binding var isAddingGame: Bool
     @Binding var isEditingGame: Bool
     @Binding var isPlayingGame: Bool
-    @State var picker: Bool = true
+    @State var pickerText: Bool = true
     @State var showSuccessToast: Bool = false
     
     @State var animate: Bool = false
@@ -58,7 +58,7 @@ struct ContentView: View {
                     }
                     ToolbarItem(placement: .primaryAction) {
                         ZStack(alignment: .leading) {
-                            Menu("\(picker ? sortBy.spaces : sortBy.spacedName)") {
+                            Menu("\(pickerText ? sortBy.spaces : sortBy.spacedName)") {
                                 ForEach(PhoenixApp.SortBy.allCases) { thing in
                                     Button("\(thing.displayName)",
                                         action: {
@@ -73,7 +73,7 @@ struct ContentView: View {
                                 .contentTransition(.symbolEffect(.replace.byLayer.downUp))
                                 .foregroundStyle(.secondary)
                                 .font(.system(size: 15))
-                                .padding(.leading, 6)
+                                .padding(.leading, 7)
                         }
                     }
                 }
@@ -87,15 +87,15 @@ struct ContentView: View {
         }
         .onAppear {
             if UserDefaults.standard.bool(forKey: "picker") {
-                picker = true
+                pickerText = true
             } else {
-                picker = false
+                pickerText = false
             }
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
                 if UserDefaults.standard.bool(forKey: "picker") {
-                    picker = true
+                    pickerText = true
                 } else {
-                    picker = false
+                    pickerText = false
                 }
                 refresh.toggle()
                 // This code will be executed every 1 second

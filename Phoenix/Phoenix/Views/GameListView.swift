@@ -86,13 +86,6 @@ struct GameListView: View {
                 .hidden()
         }
         .frame(minWidth: minWidth)
-        .onChange(of: UserDefaults.standard.bool(forKey: "picker")) { value in
-            if value {
-                minWidth = 296
-            } else {
-                minWidth = 196
-            }
-        }
         .onChange(of: UserDefaults.standard.double(forKey: "listIconSize")) { value in
             iconSize = value
         }
