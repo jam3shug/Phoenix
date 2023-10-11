@@ -59,14 +59,16 @@ struct ContentView: View {
                     ToolbarItem(placement: .primaryAction) {
                         ZStack(alignment: .leading) {
                             Menu("\(pickerText ? sortBy.spaces : sortBy.spacedName)") {
-                                ForEach(PhoenixApp.SortBy.allCases) { thing in
-                                    Button("\(thing.displayName)",
+                                ForEach(PhoenixApp.SortBy.allCases) { currentSortBy in
+                                    Button("\(currentSortBy.displayName)",
                                         action: {
-                                            sortBy = thing
+                                            sortBy = currentSortBy
                                         }
                                     )
                                 }
                             }
+                            .transition(.slide)
+                            .animation(.easeInOut)
                             Image(systemName: sortBy.symbol)
                                 .symbolRenderingMode(.palette)
                                 .symbolEffect(.bounce, value: animate)
