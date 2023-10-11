@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@available(macOS 14, *)
 @main
 struct PhoenixApp: App {
     @StateObject var updaterViewModel = UpdaterViewModel()
@@ -25,12 +26,30 @@ struct PhoenixApp: App {
             }
         }
         
+        var spaces: String {
+            switch self {
+            case .platform: return "        Platform"
+            case .status: return "       Status"
+            case .name: return "         Name"
+            case .recency: return "      Recency"
+            }
+        }
+        
+        var spacedName: String {
+            switch self {
+            case .platform: return "       "
+            case .status: return "     "
+            case .name: return "       "
+            case .recency: return "    "
+            }
+        }
+        
         var symbol: String {
             switch self {
             case .platform: return "arcade.stick.console"
             case .status: return "trophy"
-            case .name: return "textformat.abc"
-            case .recency: return "calendar.badge.clock"
+            case .name: return "textformat.abc.dottedunderline"
+            case .recency: return "clock"
             }
         }
     }

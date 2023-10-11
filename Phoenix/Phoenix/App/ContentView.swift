@@ -13,6 +13,7 @@ private let collapsedImageHeight: CGFloat = 150
 
 var games = loadGames().games.sorted()
 
+@available(macOS 14, *)
 struct ContentView: View {
     @Environment(\.openWindow) var openWindow
     @Binding var sortBy: PhoenixApp.SortBy
@@ -25,6 +26,8 @@ struct ContentView: View {
     @Binding var isPlayingGame: Bool
     @State var picker: Bool = true
     @State var showSuccessToast: Bool = false
+    
+    @State var animate: Bool = false
 
     // The stuff that is actually on screen
     var body: some View {
@@ -53,17 +56,24 @@ struct ContentView: View {
                             }
                         )
                     }
-                    if picker {
-                        ToolbarItem(placement: .primaryAction) {
-                            Picker("Sort by", selection: $sortBy) {
-                                ForEach(PhoenixApp.SortBy.allCases) { sortBy in
-                                    HStack(alignment: .center, spacing: 5) {
-                                        Image(systemName: sortBy.symbol)
-                                        Text(sortBy.displayName)
-                                    }
+                    ToolbarItem(placement: .primaryAction) {
+                        ZStack(alignment: .leading) {
+                            Menu("\(picker ? sortBy.spaces : sortBy.spacedName)") {
+                                ForEach(PhoenixApp.SortBy.allCases) { thing in
+                                    Button("\(thing.displayName)",
+                                        action: {
+                                            sortBy = thing
+                                        }
+                                    )
                                 }
                             }
-                            .pickerStyle(.automatic)
+                            Image(systemName: sortBy.symbol)
+                                .symbolRenderingMode(.palette)
+                                .symbolEffect(.bounce, value: animate)
+                                .contentTransition(.symbolEffect(.replace.byLayer.downUp))
+                                .foregroundStyle(.secondary)
+                                .font(.system(size: 15))
+                                .padding(.leading, 6)
                         }
                     }
                 }
@@ -90,6 +100,9 @@ struct ContentView: View {
                 refresh.toggle()
                 // This code will be executed every 1 second
             }
+        }
+        .onChange(of: sortBy) { _ in
+            animate.toggle()
         }
         .searchable(text: $searchText, placement: .sidebar)
         .toast(isPresenting: $showSuccessToast, tapToDismiss: true) {
