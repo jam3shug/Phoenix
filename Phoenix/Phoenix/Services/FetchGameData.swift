@@ -75,8 +75,12 @@ struct FetchGameData {
         }
 
         // Get the highest resolution artwork
+        
+        var hasSteam = false
+
         for website in igdbGame.websites {
             if website.category.rawValue == 13 {
+                hasSteam = true
                 // Split the URL string by forward slash and get the last component
                 if let lastPathComponent = website.url.split(separator: "/").firstIndex(of: "app").flatMap({ $0 + 1 < website.url.split(separator: "/").count ? website.url.split(separator: "/")[$0 + 1] : nil }) {
                     print(website.url)
@@ -97,12 +101,15 @@ struct FetchGameData {
                 } else {
                     logger.write("Invalid URL format.")
                 }
-            } else {
-                getIGDBHeader(igdbGame: igdbGame, name: igdbGame.name) { headerImage in
-                    if let headerImage = headerImage {
-                        fetchedGame.metadata["header_img"] = headerImage
-                        saveFetchedGame(name: fetchedGame.name, fetchedGame: fetchedGame)
-                    }
+            }
+        }
+
+        if !hasSteam {
+            // This block will run only if NONE of the websites have category 13
+            getIGDBHeader(igdbGame: igdbGame, name: igdbGame.name) { headerImage in
+                if let headerImage = headerImage {
+                    fetchedGame.metadata["header_img"] = headerImage
+                    saveFetchedGame(name: fetchedGame.name, fetchedGame: fetchedGame)
                 }
             }
         }
