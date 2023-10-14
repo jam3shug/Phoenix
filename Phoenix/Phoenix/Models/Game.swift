@@ -29,7 +29,7 @@ enum Platform: String, Codable, CaseIterable, Identifiable {
 }
 
 enum Status: String, Codable, CaseIterable, Identifiable {
-    case playing, shelved, backlog, beaten, completed, occasional, abandoned, none
+    case playing, shelved, occasional, backlog, beaten, completed, abandoned, none
 
     var id: Status { self }
 
@@ -37,10 +37,10 @@ enum Status: String, Codable, CaseIterable, Identifiable {
         switch self {
         case .playing: return "Playing"
         case .shelved: return "Shelved"
+        case .occasional: return "Occasional"
         case .backlog: return "Backlog"
         case .beaten: return "Beaten"
         case .completed: return "Completed"
-        case .occasional: return "Occasional"
         case .abandoned: return "Abandoned"
         case .none: return "Other"
         }
