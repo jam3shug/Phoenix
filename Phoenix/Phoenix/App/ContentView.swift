@@ -13,7 +13,6 @@ private let collapsedImageHeight: CGFloat = 150
 
 var games = loadGames().games.sorted()
 
-@available(macOS 14, *)
 struct ContentView: View {
     @Environment(\.openWindow) var openWindow
     @Binding var sortBy: PhoenixApp.SortBy
@@ -69,13 +68,21 @@ struct ContentView: View {
                             }
                             .transition(.slide)
                             .animation(.easeInOut)
-                            Image(systemName: sortBy.symbol)
-                                .symbolRenderingMode(.palette)
-                                .symbolEffect(.bounce, value: animate)
-                                .contentTransition(.symbolEffect(.replace.byLayer.downUp))
-                                .foregroundStyle(.secondary)
-                                .font(.system(size: 15))
-                                .padding(.leading, 7)
+                            if #available(macOS 14, *) {
+                                Image(systemName: sortBy.symbol)
+                                    .symbolRenderingMode(.palette)
+                                    .symbolEffect(.bounce, value: animate)
+                                    .contentTransition(.symbolEffect(.replace.byLayer.downUp))
+                                    .foregroundStyle(.secondary)
+                                    .font(.system(size: 15))
+                                    .padding(.leading, 7)
+                            } else {
+                                Image(systemName: sortBy.symbol)
+                                    .symbolRenderingMode(.palette)
+                                    .foregroundStyle(.secondary)
+                                    .font(.system(size: 15))
+                                    .padding(.leading, 7)                            }
+                            
                         }
                     }
                 }

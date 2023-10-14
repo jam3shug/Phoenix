@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@available(macOS 14, *)
 @main
 struct PhoenixApp: App {
     @StateObject var updaterViewModel = UpdaterViewModel()

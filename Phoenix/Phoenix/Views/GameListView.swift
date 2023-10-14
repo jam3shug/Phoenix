@@ -6,7 +6,6 @@
 //
 import SwiftUI
 
-@available(macOS 14, *)
 struct GameListView: View {
     
     @Binding var sortBy: PhoenixApp.SortBy
