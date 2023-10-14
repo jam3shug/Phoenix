@@ -66,7 +66,6 @@ struct ContentView: View {
                                     )
                                 }
                             }
-                            .transition(.slide)
                             .animation(.easeInOut)
                             if #available(macOS 14, *) {
                                 Image(systemName: sortBy.symbol)

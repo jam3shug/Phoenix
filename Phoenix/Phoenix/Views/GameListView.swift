@@ -17,58 +17,58 @@ struct GameListView: View {
     @State private var minWidth: CGFloat = 296
     
     var body: some View {
-        List(selection: $selectedGame) {
-            let favoriteGames = games.filter {
-                $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == true
-            }
-            if !favoriteGames.isEmpty {
-                Section(header: Text("Favorites")) {
-                    ForEach(favoriteGames, id: \.name) { game in
-                        GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
-                    }
+        VStack {
+            List(selection: $selectedGame) {
+                let favoriteGames = games.filter {
+                    $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == true
                 }
-            }
-            switch sortBy {
-            case .platform:
-                ForEach(Platform.allCases, id: \.self) { platform in
-                    let gamesForPlatform = games.filter {
-                        $0.platform == platform && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == false
-                    }
-                    if !gamesForPlatform.isEmpty {
-                        Section(header: Text(platform.displayName)) {
-                            ForEach(gamesForPlatform, id: \.name) { game in
-                                GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
-                            }
-                        }
-                    }
-                }
-            case .status:
-                ForEach(Status.allCases, id: \.self) { status in
-                    let gamesForStatus = games.filter {
-                        $0.status == status && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == false
-                    }
-                    if !gamesForStatus.isEmpty {
-                        Section(header: Text(status.displayName)) {
-                            ForEach(gamesForStatus, id: \.name) { game in
-                                GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
-                            }
-                        }
-                        
-                    }
-                }
-            case .name:
-                let gamesForName = games.filter {
-                    $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == false
-                }
-                if !gamesForName.isEmpty {
-                    Section(header: Text("Name")) {
-                        ForEach(gamesForName, id: \.name) { game in
+                if !favoriteGames.isEmpty {
+                    Section(header: Text("Favorites")) {
+                        ForEach(favoriteGames, id: \.name) { game in
                             GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
                         }
                     }
                 }
-            case .recency:
-                ForEach(Recency.allCases, id: \.self) { recency in
+                switch sortBy {
+                case .platform:
+                    ForEach(Platform.allCases, id: \.self) { platform in
+                        let gamesForPlatform = games.filter {
+                            $0.platform == platform && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == false
+                        }
+                        if !gamesForPlatform.isEmpty {
+                            Section(header: Text(platform.displayName)) {
+                                ForEach(gamesForPlatform, id: \.name) { game in
+                                    GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
+                                }
+                            }
+                        }
+                    }
+                case .status:
+                    ForEach(Status.allCases, id: \.self) { status in
+                        let gamesForStatus = games.filter {
+                            $0.status == status && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == false
+                        }
+                        if !gamesForStatus.isEmpty {
+                            Section(header: Text(status.displayName)) {
+                                ForEach(gamesForStatus, id: \.name) { game in
+                                    GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
+                                }
+                            }
+                        }
+                    }
+                case .name:
+                    let gamesForName = games.filter {
+                        $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == false
+                    }
+                    if !gamesForName.isEmpty {
+                        Section(header: Text("Name")) {
+                            ForEach(gamesForName, id: \.name) { game in
+                                GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
+                            }
+                        }
+                    }
+                case .recency:
+                    ForEach(Recency.allCases, id: \.self) { recency in
                         let gamesForRecency = games.filter {
                             $0.recency == recency && $0.is_deleted == false && ($0.name.localizedCaseInsensitiveContains(searchText) || searchText.isEmpty) && $0.is_favorite == false
                         }
@@ -81,8 +81,7 @@ struct GameListView: View {
                         }
                     }
                 }
-            Text(String(refresh))
-                .hidden()
+            }
         }
         .frame(minWidth: minWidth)
         .onChange(of: UserDefaults.standard.double(forKey: "listIconSize")) { value in
@@ -112,14 +111,6 @@ struct GameListView: View {
             if selectedGame == nil {
                 selectedGame = games[0].name
             }
-            timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-                $refresh.wrappedValue.toggle()
-            }
-        }
-        .onDisappear {
-            // Invalidate the timer when the view disappears
-            timer?.invalidate()
-            timer = nil
         }
     }
 }
