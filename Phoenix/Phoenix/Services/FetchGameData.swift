@@ -6,9 +6,7 @@
 //
 
 import Foundation
-import SwiftUI
 import IGDB_SWIFT_API
-import Kingfisher
 
 struct FetchGameData {
     let wrapper: IGDBWrapper = IGDBWrapper(clientID: "aqxuk3zeqtcuquwswjrbohyi2mf5gc", accessToken: "go5xcl37bz41a16plvnudbe6a4fajt")
