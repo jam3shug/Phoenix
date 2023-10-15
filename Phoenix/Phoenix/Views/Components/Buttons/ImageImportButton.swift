@@ -34,16 +34,14 @@ struct ImageImportButton: View {
             allowedContentTypes: [.image],
             allowsMultipleSelection: false
         ) { result in
-            if type == "Icon" {
-                resultIntoData(result: result) { data in
-                    if type == "Icon" {
-                        saveIconToFile(iconData: data, name: gameName) { image in
-                            output = image
-                        }
-                    } else if type == "Header" {
-                        saveHeaderToFile(headerData: data, name: gameName) { image in
-                            output = image
-                        }
+            resultIntoData(result: result) { data in
+                if type == "Icon" {
+                    saveIconToFile(iconData: data, name: gameName) { image in
+                        output = image
+                    }
+                } else if type == "Header" {
+                    saveHeaderToFile(headerData: data, name: gameName) { image in
+                        output = image
                     }
                 }
             }

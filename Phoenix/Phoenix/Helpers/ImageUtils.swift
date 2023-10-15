@@ -135,7 +135,7 @@ func saveIconToFile(iconData: Data, name: String, completion: @escaping ((String
                     
                     do {
                         try pngData.write(to: destinationURL)
-                        completion(destinationURL.relativeString) //TODO: try changing relativeString to absoluteString (research difference)
+                        completion(destinationURL.relativeString)
                         print("Resized and saved image to: \(destinationURL.path)")
                     } catch {
                         print("Failed to save resized image: \(error.localizedDescription)")
@@ -168,7 +168,7 @@ func saveHeaderToFile(headerData: Data, name: String, completion: @escaping ((St
         
         do {
             try headerData.write(to: destinationURL)
-            completion(destinationURL.absoluteString)
+            completion(destinationURL.relativeString)
             print("Saved image to: \(destinationURL.path)")
         } catch {
             print("Failed to save resized image: \(error.localizedDescription)")
