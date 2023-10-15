@@ -45,7 +45,7 @@ struct PhoenixApp: App {
         
         var symbol: String {
             switch self {
-            case .platform: return "arcade.stick.console"
+            case .platform: return "gamecontroller"
             case .status: return "trophy"
             case .name: return "textformat.abc.dottedunderline"
             case .recency: return "clock"

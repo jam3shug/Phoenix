@@ -110,6 +110,7 @@ struct GameInputView: View {
                                     } else {
                                         errorToastMessage = "No games found."
                                         showErrorToast = true
+                                        dismiss()
                                     }
                                 }
                             },
@@ -134,6 +135,7 @@ struct GameInputView: View {
                                         } else {
                                             errorToastMessage = "No games found."
                                             showErrorToast = true
+                                            dismiss()
                                         }
                                     }
                                 }
