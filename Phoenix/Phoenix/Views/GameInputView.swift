@@ -18,6 +18,8 @@ struct GameInputView: View {
     @Binding var showSuccessToast: Bool
     @State private var showErrorToast = false
     
+    @State private var errorToastMessage = "There was an error"
+    
     @State private var showChooseGameView: Bool = false
     
     @State var fetchedGames: [Proto_Game] = []
@@ -103,7 +105,12 @@ struct GameInputView: View {
                                 }
                                 FetchGameData().fetchGamesFromName(name: nameInput) { gamesWithName in
                                     fetchedGames = gamesWithName
-                                    showChooseGameView.toggle()
+                                    if fetchedGames.count != 0 {
+                                        showChooseGameView.toggle()
+                                    } else {
+                                        errorToastMessage = "No games found."
+                                        showErrorToast = true
+                                    }
                                 }
                             },
                             label: {
@@ -125,6 +132,7 @@ struct GameInputView: View {
                                         if fetchedGames.count != 0 {
                                             showChooseGameView.toggle()
                                         } else {
+                                            errorToastMessage = "No games found."
                                             showErrorToast = true
                                         }
                                     }
@@ -138,6 +146,7 @@ struct GameInputView: View {
                                     selectedGame = game.name
                                     showSuccessToast = true
                                 } else {
+                                    errorToastMessage = "Game couldn't be found."
                                     showErrorToast = true
                                 }
                                 dismiss()
@@ -159,10 +168,13 @@ struct GameInputView: View {
             }
         }
         .frame(minWidth: 768, maxWidth: 1024, maxHeight: 2000)
-        .toast(isPresenting: $showErrorToast, tapToDismiss: true) { // Alert if game already exists with name
-            AlertToast(type: .error(Color.red), title: "Game couldn't be saved.")
+        .toast(isPresenting: $showErrorToast, tapToDismiss: true) {
+            AlertToast(type: .error(Color.red), title: errorToastMessage)
         }
-        .sheet(isPresented: $showChooseGameView, onDismiss: { dismiss() }, content: {
+        .sheet(isPresented: $showChooseGameView, onDismiss: {
+            dismiss()
+            showSuccessToast = true
+        }, content: {
             ChooseGameView(games: $fetchedGames, nameInput: nameInput)
         })
         .onAppear() {

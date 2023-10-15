@@ -134,7 +134,7 @@ struct GameDetailView: View {
             refreshGameDetailView()
         }
         .toast(isPresenting: $showSuccessToast, tapToDismiss: true) {
-            AlertToast(type: .complete(Color.green), title: "Game Edited!")
+            AlertToast(type: .complete(Color.green), title: "Game saved!")
         }
     }
     
