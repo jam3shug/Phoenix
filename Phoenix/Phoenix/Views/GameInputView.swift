@@ -13,7 +13,7 @@ struct GameInputView: View {
     @Environment(\.dismiss) private var dismiss
     
     var isNewGame: Bool
-    @Binding var selectedGame: String?
+    @Binding var selectedGame: UUID?
     
     @Binding var showSuccessToast: Bool
     @State private var showErrorToast = false
@@ -96,12 +96,12 @@ struct GameInputView: View {
                                 var game: Game = .init(
                                     launcher: cmdInput, metadata: ["description": descInput, "header_img": headOutput, "rating": rateInput, "genre": genreInput, "developer": devInput, "publisher": pubInput, "release_date": convertIntoString(input: dateInput)], icon: iconOutput, name: nameInput, platform: platInput, status: statusInput
                                 )
-                                if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
+                                if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
                                     game.recency = games[idx].recency
                                     game.is_favorite = games[idx].is_favorite
                                     games[idx] = game
                                     saveGames()
-                                    selectedGame = game.name
+                                    selectedGame = game.id
                                 }
                                 FetchGameData().fetchGamesFromName(name: nameInput) { gamesWithName in
                                     fetchedGames = gamesWithName
@@ -140,12 +140,12 @@ struct GameInputView: View {
                                     }
                                 }
                             } else {
-                                if let idx = games.firstIndex(where: { $0.name == selectedGame }) {
+                                if let idx = games.firstIndex(where: { $0.id == selectedGame }) {
                                     game.recency = games[idx].recency
                                     game.is_favorite = games[idx].is_favorite
                                     games[idx] = game
                                     saveGames()
-                                    selectedGame = game.name
+                                    selectedGame = game.id
                                     showSuccessToast = true
                                 } else {
                                     errorToastMessage = "Game couldn't be found."
@@ -177,10 +177,10 @@ struct GameInputView: View {
             dismiss()
             showSuccessToast = true
         }, content: {
-            ChooseGameView(games: $fetchedGames, nameInput: nameInput)
+            ChooseGameView(games: $fetchedGames, gameID: selectedGame ?? games[0].id)
         })
         .onAppear() {
-            if !isNewGame, let idx = games.firstIndex(where: { $0.name == selectedGame }) {
+            if !isNewGame, let idx = games.firstIndex(where: { $0.id == selectedGame }) {
                 let currentGame = games[idx]
                 nameInput = currentGame.name
                 iconOutput = currentGame.icon

@@ -56,7 +56,7 @@ struct PhoenixApp: App {
     @AppStorage("sortBy")
     var sortBy: SortBy = .platform
     
-    @State var selectedGame: String?
+    @State var selectedGame: UUID?
     
     @State var isAddingGame: Bool = false
     @State var isEditingGame: Bool = false

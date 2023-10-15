@@ -66,6 +66,7 @@ enum Recency: String, Codable, CaseIterable, Identifiable {
 }
 
 struct Game: Codable, Comparable, Hashable {
+    var id: UUID
     var steamID: String
     var igdbID: String
     var launcher: String
@@ -79,6 +80,7 @@ struct Game: Codable, Comparable, Hashable {
     var is_favorite: Bool
 
     init(
+        id: UUID = UUID(),
         steamID: String = "",
         igdbID: String = "",
         launcher: String = "",
@@ -100,6 +102,7 @@ struct Game: Codable, Comparable, Hashable {
         is_deleted: Bool = false,
         is_favorite: Bool = false
     ) {
+        self.id = id
         self.steamID = steamID
         self.igdbID = igdbID
         self.launcher = launcher
@@ -114,7 +117,7 @@ struct Game: Codable, Comparable, Hashable {
     }
     
     enum CodingKeys: String, CodingKey {
-        case steamID, igdbID, launcher, metadata, icon, name, platform, status, recency, is_deleted, is_favorite
+        case id, steamID, igdbID, launcher, metadata, icon, name, platform, status, recency, is_deleted, is_favorite
     }
         
     init(from decoder: Decoder) throws {
@@ -180,6 +183,13 @@ struct Game: Codable, Comparable, Hashable {
             self.igdbID = igdbID
         } else {
             self.igdbID = ""
+        }
+        
+        // Handle id conversion
+        if let id = try? container.decode(UUID.self, forKey: .id) {
+            self.id = id
+        } else {
+            self.id = UUID()
         }
         
         // Handle is_deleted conversion with default to ""
