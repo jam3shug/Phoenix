@@ -46,7 +46,7 @@ struct GameInputView: View {
                 Group {
                     TextBox(textBoxName: "Name", placeholder: "Enter game name", input: $nameInput) // Name input
                     
-                    ImageImportButton(type: "Icon", isImporting: $iconIsImporting, output: $iconOutput, gameName: nameInput)
+                    ImageImportButton(type: "Icon", isImporting: $iconIsImporting, output: $iconOutput, gameID: selectedGame ?? games[0].id)
         
                     SlotInput(contentName: "Platform", content: {
                         Picker("", selection: $platInput) {
@@ -72,7 +72,7 @@ struct GameInputView: View {
                         
                         LargeTextBox(textBoxName: "Genres", input: $genreInput)
                         
-                        ImageImportButton(type: "Header", isImporting: $headIsImporting, output: $headOutput, gameName: nameInput)
+                        ImageImportButton(type: "Header", isImporting: $headIsImporting, output: $headOutput, gameID: selectedGame ?? games[0].id)
                         
                         TextBox(textBoxName: "Rating", placeholder: "X / 10", input: $rateInput)
                         
@@ -105,6 +105,7 @@ struct GameInputView: View {
                                 }
                                 FetchGameData().fetchGamesFromName(name: nameInput) { gamesWithName in
                                     fetchedGames = gamesWithName
+                                    selectedGame = game.id
                                     if fetchedGames.count != 0 {
                                         showChooseGameView.toggle()
                                     } else {
@@ -130,6 +131,7 @@ struct GameInputView: View {
                                         fetchedGames = gamesWithName
                                         games.append(game)
                                         saveGames()
+                                        selectedGame = game.id
                                         if fetchedGames.count != 0 {
                                             showChooseGameView.toggle()
                                         } else {

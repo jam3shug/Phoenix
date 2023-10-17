@@ -12,7 +12,7 @@ struct ImageImportButton: View {
     var type: String
     @Binding var isImporting: Bool
     @Binding var output: String
-    var gameName: String
+    var gameID: UUID
     
     var body: some View {
         HStack {
@@ -36,11 +36,11 @@ struct ImageImportButton: View {
         ) { result in
             resultIntoData(result: result) { data in
                 if type == "Icon" {
-                    saveIconToFile(iconData: data, name: gameName) { image in
+                    saveIconToFile(iconData: data, gameID: gameID) { image in
                         output = image
                     }
                 } else if type == "Header" {
-                    saveHeaderToFile(headerData: data, name: gameName) { image in
+                    saveHeaderToFile(headerData: data, gameID: gameID) { image in
                         output = image
                     }
                 }

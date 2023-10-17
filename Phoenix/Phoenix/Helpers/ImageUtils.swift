@@ -93,7 +93,7 @@ func resultIntoData(result: Result<[URL], Error>, completion: @escaping ((Data) 
     }
 }
 
-func saveIconToFile(iconData: Data, name: String, completion: @escaping ((String) -> Void)) {
+func saveIconToFile(iconData: Data, gameID: UUID, completion: @escaping ((String) -> Void)) {
     do {
         // Resize the image to 48x48 pixels
         if let image = NSImage(data: iconData) {
@@ -131,7 +131,7 @@ func saveIconToFile(iconData: Data, name: String, completion: @escaping ((String
                         }
                     }
                     
-                    let destinationURL: URL = cachedImagesDirectoryURL.appendingPathComponent("\(name)_icon.png")
+                    let destinationURL: URL = cachedImagesDirectoryURL.appendingPathComponent("\(gameID)_icon.png")
                     
                     do {
                         try pngData.write(to: destinationURL)
@@ -146,7 +146,7 @@ func saveIconToFile(iconData: Data, name: String, completion: @escaping ((String
     }
 }
 
-func saveHeaderToFile(headerData: Data, name: String, completion: @escaping ((String) -> Void)) {
+func saveHeaderToFile(headerData: Data, gameID: UUID, completion: @escaping ((String) -> Void)) {
     do {
         let fileManager = FileManager.default
         guard let appSupportURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
@@ -164,7 +164,7 @@ func saveHeaderToFile(headerData: Data, name: String, completion: @escaping ((St
             }
         }
 
-        let destinationURL: URL = cachedImagesDirectoryPath.appendingPathComponent("\(name)_header.jpg")
+        let destinationURL: URL = cachedImagesDirectoryPath.appendingPathComponent("\(gameID)_header.jpg")
         
         do {
             try headerData.write(to: destinationURL)

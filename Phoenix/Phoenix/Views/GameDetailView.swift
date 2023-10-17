@@ -30,8 +30,8 @@ struct GameDetailView: View {
                 let game = getGameFromID(id: selectedGame ?? games[0].id)
                 if let game = game {
                     // create header image
-                    if let headerImage = game.metadata["header_img"] {
-                        Image(nsImage: loadImageFromFile(filePath: (headerImage.replacingOccurrences(of: "\\", with: ":"))))
+                    if let selectedGame = selectedGame {
+                        Image(nsImage: loadImageFromFile(filePath: "\(selectedGame)_header.jpeg"))
                             .resizable()
                             .scaledToFill()
                             .frame(

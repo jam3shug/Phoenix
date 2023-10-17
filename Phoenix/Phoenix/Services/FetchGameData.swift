@@ -84,7 +84,7 @@ struct FetchGameData {
                     print(lastPathComponent)
                     if let number = Int(lastPathComponent) {
                         fetchedGame.steamID = String(number)
-                        getSteamHeader(number: number, name: igdbGame.name) { headerImage in
+                        getSteamHeader(number: number, gameID: gameID) { headerImage in
                             if let headerImage = headerImage {
                                 fetchedGame.metadata["header_img"] = headerImage
                                 saveFetchedGame(gameID: gameID, fetchedGame: fetchedGame)
@@ -103,7 +103,7 @@ struct FetchGameData {
 
         if !hasSteam {
             // This block will run only if NONE of the websites have category 13
-            getIGDBHeader(igdbGame: igdbGame, name: igdbGame.name) { headerImage in
+            getIGDBHeader(igdbGame: igdbGame, gameID: gameID) { headerImage in
                 if let headerImage = headerImage {
                     fetchedGame.metadata["header_img"] = headerImage
                     saveFetchedGame(gameID: gameID, fetchedGame: fetchedGame)
@@ -186,12 +186,12 @@ struct FetchGameData {
         saveFetchedGame(gameID: gameID, fetchedGame: fetchedGame)
     }
     
-    func getSteamHeader(number: Int, name: String, completion: @escaping (String?) -> Void) {
+    func getSteamHeader(number: Int, gameID: UUID, completion: @escaping (String?) -> Void) {
         let imageURL = "https://cdn.cloudflare.steamstatic.com/steam/apps/\(number)/library_hero.jpg"
         if let url = URL(string: imageURL) {	
             URLSession.shared.dataTask(with: url) { headerData, response, error in
                 if let headerData = headerData {
-                    saveHeaderToFile(headerData: headerData, name: name) { headerImage in
+                    saveHeaderToFile(headerData: headerData, gameID: gameID) { headerImage in
                         completion(headerImage)
                     }
                 }
@@ -199,13 +199,13 @@ struct FetchGameData {
         }
     }
     
-    func getIGDBHeader(igdbGame: Proto_Game, name: String, completion: @escaping (String?) -> Void) {
+    func getIGDBHeader(igdbGame: Proto_Game, gameID: UUID, completion: @escaping (String?) -> Void) {
         if let highestResArtwork = igdbGame.artworks.max(by: { $0.width < $1.width }) {
             let imageURL = imageBuilder(imageID: highestResArtwork.imageID, size: .FHD, imageType: .JPEG)
             if let url = URL(string: imageURL) {
                 URLSession.shared.dataTask(with: url) { headerData, response, error in
                     if let headerData = headerData {
-                        saveHeaderToFile(headerData: headerData, name: name) { headerImage in
+                        saveHeaderToFile(headerData: headerData, gameID: gameID) { headerImage in
                             completion(headerImage)
                         }
                     }
