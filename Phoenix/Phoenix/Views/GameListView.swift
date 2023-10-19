@@ -129,69 +129,23 @@ struct GameListItem: View {
         }
         .contextMenu {
             Button(action: {
-                favoriteGame(game, refresh: $refresh)
+                if let idx = games.firstIndex(where: { $0.id == game.id }) {
+                    games[idx].isFavorite.toggle()
+                }
+                saveGames()
             }) {
                 Text("\(game.isFavorite ? "Unfavorite" : "Favorite") game")
             }
             .accessibility(identifier: "Favorite Game")
             Button(action: {
-                hideGame(game, refresh: $refresh)
+                if let idx = games.firstIndex(where: { $0.id == game.id }) {
+                    games[idx].isHidden = true
+                }
+                saveGames()
             }) {
                 Text("Hide game")
             }
             .accessibility(identifier: "Hide Game")
-        }
-    }
-    
-    /// Favorites a game from the games list by toggling its `isFavorite` property.
-    ///
-    /// - Parameters:
-    ///   - game: The game to favorite / unfavorite.
-    ///   - refresh: A binding to a Boolean value indicating whether the game list should be refreshed.
-    func favoriteGame(_ game: Game, refresh: Binding<Bool>) {
-        if let index = games.firstIndex(where: { $0.name == game.name }) {
-            games[index].isFavorite.toggle()
-            refresh.wrappedValue.toggle()
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = .prettyPrinted
-
-            do {
-                let gamesJSON = try encoder.encode(games)
-
-                if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
-                    // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
-                    gamesJSONString = "{\"games\": \(gamesJSONString)}"
-                    writeGamesToJSON(data: gamesJSONString)
-                }
-            } catch {
-                logger.write(error.localizedDescription)
-            }
-        }
-    }
-    
-    /// Deletes a game from the games list by setting its `isHidden` property to `true`.
-    ///
-    /// - Parameters:
-    ///   - game: The game to delete.
-    ///   - refresh: A binding to a Boolean value indicating whether the game list should be refreshed.
-    func hideGame(_ game: Game, refresh: Binding<Bool>) {
-        if let index = games.firstIndex(where: { $0.name == game.name }) {
-            games[index].isHidden = true
-            refresh.wrappedValue.toggle()
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = .prettyPrinted
-
-            do {
-                let gamesJSON = try encoder.encode(games)
-
-                if var gamesJSONString = String(data: gamesJSON, encoding: .utf8) {
-                    // Add the necessary JSON elements for the string to be recognized as type "Games" on next read
-                    gamesJSONString = "{\"games\": \(gamesJSONString)}"
-                    writeGamesToJSON(data: gamesJSONString)
-                }
-            } catch {
-                logger.write(error.localizedDescription)
-            }
         }
     }
 }
