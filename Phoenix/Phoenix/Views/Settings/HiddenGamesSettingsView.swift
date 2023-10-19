@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+
 struct HiddenGamesSettingsView: View {
     
     @State var selectedGame: String?
+    @Binding var refresh: Bool = false
     
     var body: some View {
         VStack {
@@ -29,6 +31,7 @@ struct HiddenGamesSettingsView: View {
                                         if let idx = games.firstIndex(where: { $0.id == game.id }) {
                                             games[idx].isHidden = false
                                         }
+                                        $refresh.toggle()
                                         saveGames()
                                     }) {
                                         Text("Show game")

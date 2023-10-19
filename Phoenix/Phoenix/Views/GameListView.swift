@@ -10,6 +10,7 @@ struct GameListView: View {
     
     @Binding var sortBy: PhoenixApp.SortBy
     @Binding var selectedGame: UUID?
+    @Binding var refresh: Bool
     @Binding var searchText: String
     @State private var timer: Timer?
     @State private var iconSize: Double = 24
@@ -24,7 +25,7 @@ struct GameListView: View {
                 if !favoriteGames.isEmpty {
                     Section(header: Text("Favorites")) {
                         ForEach(favoriteGames, id: \.id) { game in
-                            GameListItem(game: game, iconSize: $iconSize)
+                            GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
                         }
                     }
                 }
@@ -37,7 +38,7 @@ struct GameListView: View {
                         if !gamesForPlatform.isEmpty {
                             Section(header: Text(platform.displayName)) {
                                 ForEach(gamesForPlatform, id: \.id) { game in
-                                    GameListItem(game: game, iconSize: $iconSize)
+                                    GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
                                 }
                             }
                         }
@@ -50,7 +51,7 @@ struct GameListView: View {
                         if !gamesForStatus.isEmpty {
                             Section(header: Text(status.displayName)) {
                                 ForEach(gamesForStatus, id: \.id) { game in
-                                    GameListItem(game: game, iconSize: $iconSize)
+                                    GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
                                 }
                             }
                         }
@@ -62,7 +63,7 @@ struct GameListView: View {
                     if !gamesForName.isEmpty {
                         Section(header: Text("Name")) {
                             ForEach(gamesForName, id: \.id) { game in
-                                GameListItem(game: game, iconSize: $iconSize)
+                                GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
                             }
                         }
                     }
@@ -74,7 +75,7 @@ struct GameListView: View {
                         if !gamesForRecency.isEmpty {
                             Section(header: Text(recency.displayName)) {
                                 ForEach(gamesForRecency, id: \.id) { game in
-                                    GameListItem(game: game, iconSize: $iconSize)
+                                    GameListItem(game: game, refresh: $refresh, iconSize: $iconSize)
                                 }
                             }
                         }
@@ -116,6 +117,7 @@ struct GameListView: View {
 
 struct GameListItem: View {
     @State var game: Game
+    @Binding var refresh: Bool
     @Binding var iconSize: Double
     
     var body: some View {
