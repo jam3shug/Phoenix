@@ -31,7 +31,7 @@ struct HiddenGamesSettingsView: View {
                                         if let idx = games.firstIndex(where: { $0.id == game.id }) {
                                             games[idx].isHidden = false
                                         }
-                                        refresh.wrappedValue.toggle()
+                                        $refresh.wrappedValue.toggle()
                                         saveGames()
                                     }) {
                                         Text("Show game")
