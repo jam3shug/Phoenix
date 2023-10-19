@@ -10,7 +10,7 @@ import SwiftUI
 struct HiddenGamesSettingsView: View {
     
     @State var selectedGame: String?
-    @Binding var refresh: Bool = false
+    @Binding var refresh: Bool
     
     var body: some View {
         VStack {
