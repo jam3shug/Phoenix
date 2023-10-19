@@ -54,6 +54,7 @@ struct FetchGameData {
             launcher: games[idx].launcher,
             metadata: [
                 "rating": games[idx].metadata["rating"] ?? "",
+                "header_img": games[idx].metadata["header_img"] ?? "",
             ],
             icon: games[idx].icon,
             name: games[idx].name,
@@ -69,46 +70,6 @@ struct FetchGameData {
             fetchedGame.metadata["description"] = igdbGame.summary
         } else {
             fetchedGame.metadata["description"] = igdbGame.storyline
-        }
-
-        // Get the highest resolution artwork
-        
-        var hasSteam = false
-
-        for website in igdbGame.websites {
-            if website.category.rawValue == 13 {
-                hasSteam = true
-                // Split the URL string by forward slash and get the last component
-                if let lastPathComponent = website.url.split(separator: "/").firstIndex(of: "app").flatMap({ $0 + 1 < website.url.split(separator: "/").count ? website.url.split(separator: "/")[$0 + 1] : nil }) {
-                    print(website.url)
-                    print(lastPathComponent)
-                    if let number = Int(lastPathComponent) {
-                        fetchedGame.steamID = String(number)
-                        getSteamHeader(number: number, gameID: gameID) { headerImage in
-                            if let headerImage = headerImage {
-                                fetchedGame.metadata["header_img"] = headerImage
-                                saveFetchedGame(gameID: gameID, fetchedGame: fetchedGame)
-                            } else {
-                                print("steam is on something")
-                            }
-                        }
-                    } else {
-                        logger.write("The last path component is not a valid number.")
-                    }
-                } else {
-                    logger.write("Invalid URL format.")
-                }
-            }
-        }
-
-        if !hasSteam {
-            // This block will run only if NONE of the websites have category 13
-            getIGDBHeader(igdbGame: igdbGame, gameID: gameID) { headerImage in
-                if let headerImage = headerImage {
-                    fetchedGame.metadata["header_img"] = headerImage
-                    saveFetchedGame(gameID: gameID, fetchedGame: fetchedGame)
-                }
-            }
         }
 
         // Combine genres (excluding "Science Fiction")
@@ -182,8 +143,47 @@ struct FetchGameData {
         dateFormatter.dateFormat = "MMMM dd, yyyy"
 
         fetchedGame.metadata["release_date"] = dateFormatter.string(from: date)
+        
+        // Get the highest resolution artwork
+        var hasSteam = false
 
-        saveFetchedGame(gameID: gameID, fetchedGame: fetchedGame)
+        for website in igdbGame.websites {
+            if website.category.rawValue == 13 {
+                hasSteam = true
+                // Split the URL string by forward slash and get the last component
+                if let lastPathComponent = website.url.split(separator: "/").firstIndex(of: "app").flatMap({ $0 + 1 < website.url.split(separator: "/").count ? website.url.split(separator: "/")[$0 + 1] : nil }) {
+                    print(website.url)
+                    print(lastPathComponent)
+                    if let number = Int(lastPathComponent) {
+                        fetchedGame.steamID = String(number)
+                        getSteamHeader(number: number, gameID: gameID) { headerImage in
+                            if let headerImage = headerImage {
+                                fetchedGame.metadata["header_img"] = headerImage
+                                print(fetchedGame.metadata["header_img"] ?? "FUCK")
+                                saveFetchedGame(gameID: gameID, fetchedGame: fetchedGame)
+                                print("saved header")
+                            } else {
+                                print("steam is on something")
+                            }
+                        }
+                    } else {
+                        logger.write("The last path component is not a valid number.")
+                    }
+                } else {
+                    logger.write("Invalid URL format.")
+                }
+            }
+        }
+
+        if !hasSteam {
+            // This block will run only if NONE of the websites have category 13 which is a steam link
+            getIGDBHeader(igdbGame: igdbGame, gameID: gameID) { headerImage in
+                if let headerImage = headerImage {
+                    fetchedGame.metadata["header_img"] = headerImage
+                    saveFetchedGame(gameID: gameID, fetchedGame: fetchedGame)
+                }
+            }
+        }
     }
     
     func getSteamHeader(number: Int, gameID: UUID, completion: @escaping (String?) -> Void) {

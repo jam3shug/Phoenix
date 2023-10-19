@@ -46,7 +46,7 @@ struct GameInputView: View {
                 Group {
                     TextBox(textBoxName: "Name", placeholder: "Enter game name", input: $nameInput) // Name input
                     
-                    ImageImportButton(type: "Icon", isImporting: $iconIsImporting, output: $iconOutput, gameID: selectedGame ?? games[0].id)
+                    ImageImportButton(type: "Icon", isImporting: $iconIsImporting, output: $iconOutput, gameID: selectedGame ?? UUID())
         
                     SlotInput(contentName: "Platform", content: {
                         Picker("", selection: $platInput) {
@@ -72,7 +72,7 @@ struct GameInputView: View {
                         
                         LargeTextBox(textBoxName: "Genres", input: $genreInput)
                         
-                        ImageImportButton(type: "Header", isImporting: $headIsImporting, output: $headOutput, gameID: selectedGame ?? games[0].id)
+                        ImageImportButton(type: "Header", isImporting: $headIsImporting, output: $headOutput, gameID: selectedGame ?? UUID())
                         
                         TextBox(textBoxName: "Rating", placeholder: "X / 10", input: $rateInput)
                         
@@ -179,7 +179,7 @@ struct GameInputView: View {
             dismiss()
             showSuccessToast = true
         }, content: {
-            ChooseGameView(games: $fetchedGames, gameID: selectedGame ?? games[0].id)
+            ChooseGameView(games: $fetchedGames, gameID: selectedGame ?? UUID())
         })
         .onAppear() {
             if !isNewGame, let idx = games.firstIndex(where: { $0.id == selectedGame }) {
