@@ -61,7 +61,7 @@ struct FetchGameData {
             platform: games[idx].platform,
             status: games[idx].status,
             recency: games[idx].recency,
-            is_favorite: games[idx].is_favorite
+            isFavorite: games[idx].isFavorite
         )
         
         fetchedGame.igdbID = String(igdbGame.id)
