@@ -11,37 +11,43 @@ struct HiddenGamesSettingsView: View {
     
     @State var selectedGame: String?
     @State var refresh: Bool = false
+    @State private var timer: Timer?
     
     var body: some View {
         VStack {
             List(selection: $selectedGame) {
-                ForEach(Platform.allCases, id: \.self) { platform in
-                    let gamesForPlatform = games.filter { $0.platform == platform && $0.isHidden == true}
-                    if !gamesForPlatform.isEmpty {
-                        Section(header: Text(platform.displayName)) {
-                            ForEach(gamesForPlatform, id: \.id) { game in
-                                HStack {
-                                    Image(nsImage: loadImageFromFile(filePath: game.icon))
-                                        .resizable()
-                                        .frame(width: 15, height: 15)
-                                    Text(game.name)
-                                }
-                                .contextMenu {
-                                    Button(action: {
-                                        if let idx = games.firstIndex(where: { $0.id == game.id }) {
-                                            games[idx].isHidden = false
-                                        }
-                                        $refresh.wrappedValue.toggle()
-                                        saveGames()
-                                    }) {
-                                        Text("Show game")
-                                    }
-                                    .accessibility(identifier: "Show Game")
-                                }
-                            }.scrollDisabled(true)
+                let hiddenGames = games.filter { $0.isHidden == true}
+                if !hiddenGames.isEmpty {
+                    ForEach(hiddenGames, id: \.id) { game in
+                        HStack {
+                            Image(nsImage: loadImageFromFile(filePath: game.icon))
+                                .resizable()
+                                .frame(width: 15, height: 15)
+                            Text(game.name)
+                            Text(String(refresh))
+                                .hidden()
                         }
-                    }
+                        .contextMenu {
+                            Button(action: {
+                                if let idx = games.firstIndex(where: { $0.id == game.id }) {
+                                    games[idx].isHidden = false
+                                }
+                                self.refresh.toggle()
+                                saveGames()
+                            }) {
+                                Text("Show game")
+                            }
+                            .accessibility(identifier: "Show Game")
+                        }
+                    }.scrollDisabled(true)
                 }
+            }
+        }
+        .onAppear {
+            self.refresh.toggle()
+            timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                self.refresh.toggle()
+                // This code will be executed every 1 second
             }
         }
     }
