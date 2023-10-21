@@ -58,6 +58,7 @@ struct ContentView: View {
                     ToolbarItem(placement: .primaryAction) {
                         ZStack(alignment: .leading) {
                             Menu("\(pickerText ? sortBy.spaces : sortBy.spacedName)") {
+                                Text("Sort by:")
                                 ForEach(PhoenixApp.SortBy.allCases) { currentSortBy in
                                     Button("\(currentSortBy.displayName)",
                                         action: {
