@@ -116,7 +116,7 @@ func saveIconToFile(iconData: Data, gameID: UUID, completion: @escaping ((String
                     let cachedImagesDirectoryURL: URL
                     do {
                         cachedImagesDirectoryURL = try fileManager.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-                            .appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
+                            .appendingPathComponent("Phoenix/cachedImages/icons", isDirectory: true)
                     } catch {
                         print("Failed to get directory URL: \(error.localizedDescription)")
                         return
@@ -153,7 +153,7 @@ func saveHeaderToFile(headerData: Data, gameID: UUID, completion: @escaping ((St
             fatalError("Unable to retrieve application support directory URL")
         }
         
-        let cachedImagesDirectoryPath = appSupportURL.appendingPathComponent("Phoenix/cachedImages", isDirectory: true)
+        let cachedImagesDirectoryPath = appSupportURL.appendingPathComponent("Phoenix/cachedImages/headers", isDirectory: true)
         
         if !fileManager.fileExists(atPath: cachedImagesDirectoryPath.path) {
             do {
