@@ -127,8 +127,6 @@ func saveIconToFile(iconData: Data, gameID: UUID, completion: @escaping ((String
                        fraction: 1.0)
             newImage.unlockFocus()
             
-            // Convert the resized image to data
-//            let nsjpeg = NSBitmapImageRep.representation(using: NSBitmapImageRep.FileType.jpeg, properties: [NSBitmapImageRep.PropertyKey.colorSyncProfileData : (Any).self])
             if let tiffRepresentation = newImage.tiffRepresentation {
                 let bitmapImageRep = NSBitmapImageRep(data: tiffRepresentation)
                 if let pngData = bitmapImageRep?.representation(using: .png, properties: [:]) {
