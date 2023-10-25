@@ -17,7 +17,7 @@ struct ContentView: View {
     @Environment(\.openWindow) var openWindow
     @Binding var sortBy: PhoenixApp.SortBy
     @State var searchText: String = ""
-    @Binding var selectedGame: UUID?
+    @State var selectedGame: UUID = UUID()
     @State var refresh: Bool = false
     @State private var timer: Timer?
     @Binding var isAddingGame: Bool

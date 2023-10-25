@@ -10,7 +10,7 @@ import AlertToast
 struct GameDetailView: View {
     
     @State var showingAlert: Bool = false
-    @Binding var selectedGame: UUID?
+    @Binding var selectedGame: UUID
     @State var selectedGameName: String?
     @Binding var refresh: Bool
     @Binding var editingGame: Bool
@@ -27,7 +27,7 @@ struct GameDetailView: View {
     var body: some View {
         ScrollView {
             GeometryReader { geometry in
-                let game = getGameFromID(id: selectedGame ?? games[0].id)
+                let game = getGameFromID(id: selectedGame)
                 if let game = game {
                     // create header image
                     if let headerImage = game.metadata["header_img"] {
@@ -73,7 +73,7 @@ struct GameDetailView: View {
                         HStack(alignment: .top) {
                             //description
                             VStack(alignment: .leading) {
-                                let game = getGameFromID(id: selectedGame ?? games[0].id)
+                                let game = getGameFromID(id: selectedGame)
                                 if game?.metadata["description"] != "" {
                                     TextCard(text: game?.metadata["description"] ?? "No game selected")
                                 } else {
@@ -83,7 +83,7 @@ struct GameDetailView: View {
                             .padding(.trailing, 7.5)
                             
                             SlotCard(content: {
-                                let game = getGameFromID(id: selectedGame ?? games[0].id)
+                                let game = getGameFromID(id: selectedGame)
                                 if let game = game {
                                     VStack(alignment: .leading, spacing: 7.5) {
                                         GameMetadata(field: "Last Played", value: game.metadata["last_played"] ?? "Never")
@@ -112,9 +112,6 @@ struct GameDetailView: View {
         .onAppear {
             // Usage
             refreshGameDetailView()
-            if selectedGame == nil {
-                selectedGame = games[0].id
-            }
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
                 // This code will be executed every 1 second
                 refresh.toggle()
@@ -126,7 +123,7 @@ struct GameDetailView: View {
             timer = nil
         }
         .onChange(of: playingGame) { _ in
-            let game = getGameFromID(id: selectedGame ?? games[0].id)
+            let game = getGameFromID(id: selectedGame)
             if let game = game {
                 playGame(game: game)
             }

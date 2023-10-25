@@ -9,7 +9,7 @@ import SwiftUI
 struct GameListView: View {
     
     @Binding var sortBy: PhoenixApp.SortBy
-    @Binding var selectedGame: UUID?
+    @Binding var selectedGame: UUID
     @Binding var refresh: Bool
     @Binding var searchText: String
     @State private var timer: Timer?
@@ -107,9 +107,6 @@ struct GameListView: View {
                 iconSize = 0
             } else {
                 iconSize = UserDefaults.standard.double(forKey: "listIconSize")
-            }
-            if selectedGame == nil {
-                selectedGame = games[0].id
             }
         }
     }
