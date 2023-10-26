@@ -57,16 +57,6 @@ struct GameDetailView: View {
                             
                             // settings button
                             SmallToggleButton(toggle: $editingGame, symbol: "pencil", textColor: textSettingsColor, bgColor: bgSettingsColor)
-                            .sheet(
-                                isPresented: $editingGame,
-                                onDismiss: {
-                                    // Refresh game list
-                                    refresh.toggle()
-                                },
-                                content: {
-                                    GameInputView(isNewGame: false, selectedGame: $selectedGame, showSuccessToast: $showSuccessToast)
-                                }
-                            )
                         } // hstack
                         .frame(alignment: .leading)
 

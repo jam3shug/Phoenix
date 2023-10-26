@@ -16,9 +16,10 @@ struct GameInputView: View {
     @Binding var selectedGame: UUID
     
     @Binding var showSuccessToast: Bool
-    @State private var showErrorToast = false
+    @Binding var successToastText: String
     
-    @State private var errorToastMessage = "There was an error"
+    @Binding var showFailureToast: Bool
+    @Binding var failureToastText: String
     
     @State private var showChooseGameView: Bool = false
     
@@ -109,8 +110,8 @@ struct GameInputView: View {
                                     if fetchedGames.count != 0 {
                                         showChooseGameView.toggle()
                                     } else {
-                                        errorToastMessage = "No games found."
-                                        showErrorToast = true
+                                        failureToastText = "No games found."
+                                        showFailureToast = true
                                         dismiss()
                                     }
                                 }
@@ -135,8 +136,8 @@ struct GameInputView: View {
                                         if fetchedGames.count != 0 {
                                             showChooseGameView.toggle()
                                         } else {
-                                            errorToastMessage = "No games found."
-                                            showErrorToast = true
+                                            failureToastText = "No games found."
+                                            showFailureToast = true
                                             dismiss()
                                         }
                                     }
@@ -150,8 +151,8 @@ struct GameInputView: View {
                                     selectedGame = game.id
                                     showSuccessToast = true
                                 } else {
-                                    errorToastMessage = "Game couldn't be found."
-                                    showErrorToast = true
+                                    failureToastText = "Game couldn't be found."
+                                    showFailureToast = true
                                 }
                                 dismiss()
                             }
@@ -172,9 +173,6 @@ struct GameInputView: View {
             }
         }
         .frame(minWidth: 768, maxWidth: 1024, maxHeight: 2000)
-        .toast(isPresenting: $showErrorToast, tapToDismiss: true) {
-            AlertToast(type: .error(Color.red), title: errorToastMessage)
-        }
         .sheet(isPresented: $showChooseGameView, onDismiss: {
             dismiss()
             showSuccessToast = true
