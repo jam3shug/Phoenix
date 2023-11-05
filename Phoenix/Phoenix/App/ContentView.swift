@@ -63,7 +63,7 @@ struct ContentView: View {
                     }
                     ToolbarItem(placement: .primaryAction) {
                         ZStack(alignment: .leading) {
-                            if #available(macOS 14, *) {
+                            if #available(macOS 14, *), Defaults[.showAnimationOfSortByIcon] {
                                 Menu("\(showPickerText ? sortBy.spaces : sortBy.spacedName)") {
                                     Text("Sort by:")
                                     ForEach(PhoenixApp.SortBy.allCases) { currentSortBy in
