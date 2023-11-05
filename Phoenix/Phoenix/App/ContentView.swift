@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AlertToast
+import Defaults
 
 private let headerImageHeight: CGFloat = 500
 private let collapsedImageHeight: CGFloat = 150
@@ -23,7 +24,8 @@ struct ContentView: View {
     @Binding var isAddingGame: Bool
     @Binding var isEditingGame: Bool
     @Binding var isPlayingGame: Bool
-    @State var pickerText: Bool = true
+    
+    @Default(.showPickerText) var showPickerText
     
     @State var showSuccessToast: Bool = false
     @State var successToastText: String = "Success"
@@ -63,7 +65,7 @@ struct ContentView: View {
                     ToolbarItem(placement: .primaryAction) {
                         ZStack(alignment: .leading) {
                             if #available(macOS 14, *) {
-                                Menu("\(pickerText ? sortBy.spaces : sortBy.spacedName)") {
+                                Menu("\(showPickerText ? sortBy.spaces : sortBy.spacedName)") {
                                     Text("Sort by:")
                                     ForEach(PhoenixApp.SortBy.allCases) { currentSortBy in
                                         Button("\(currentSortBy.displayName)",
@@ -82,7 +84,7 @@ struct ContentView: View {
                                     .font(.system(size: 15))
                                     .padding(.leading, 7)
                             } else {
-                                Menu("\(pickerText ? sortBy.spaces : sortBy.spacedName)") {
+                                Menu("\(showPickerText ? sortBy.spaces : sortBy.spacedName)") {
                                     Text("Sort by:")
                                     ForEach(PhoenixApp.SortBy.allCases) { currentSortBy in
                                         Button("\(currentSortBy.displayName)",
@@ -113,17 +115,7 @@ struct ContentView: View {
                 .hidden()
         }
         .onAppear {
-            if UserDefaults.standard.bool(forKey: "picker") {
-                pickerText = true
-            } else {
-                pickerText = false
-            }
             timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-                if UserDefaults.standard.bool(forKey: "picker") {
-                    pickerText = true
-                } else {
-                    pickerText = false
-                }
                 refresh.toggle()
                 // This code will be executed every 1 second
             }
