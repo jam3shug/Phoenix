@@ -13,6 +13,7 @@ typealias Default = _Default
 
 extension Defaults.Keys {
     static let selectedGame = Key<UUID>("selectedGame", default: UUID())
+    static let sortBy = Key<PhoenixApp.SortBy>("sortBy", default: .platform)
     
     static let isGameDetectionEnabled = Key<Bool>("isGameDetectionEnabled", default: false)
     static let isMetaDataFetchingEnabled = Key<Bool>("isMetaDataFetchingEnabled", default: true)
