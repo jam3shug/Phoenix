@@ -95,12 +95,15 @@ struct GameListItem: View {
     @State var game: Game
     @Binding var refresh: Bool
     @State var iconSize: Double = Defaults[.listIconSize]
+    @State var iconsHidden: Bool = Defaults[.listIconsHidden]
     
     var body: some View {
         HStack {
-            Image(nsImage: loadImageFromFile(filePath: game.icon))
-                .resizable()
-                .frame(width: iconSize, height: iconSize)
+            if !iconsHidden {
+                Image(nsImage: loadImageFromFile(filePath: game.icon))
+                    .resizable()
+                    .frame(width: iconSize, height: iconSize)
+            }
             Text(game.name)
         }
         .contextMenu {
@@ -134,6 +137,9 @@ struct GameListItem: View {
         }
         .onChange(of: Defaults[.listIconSize]) { value in
             iconSize = value
+        }
+        .onChange(of: Defaults[.listIconsHidden]) { value in
+            iconsHidden = value
         }
     }
 }
