@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Defaults
 
 enum Platform: String, Codable, CaseIterable, Identifiable {
     case mac, steam, gog, epic, pc, ps, nin, sega, xbox, none
@@ -246,10 +247,9 @@ func checkForPlatform(arr: [Game], plat: Platform) -> Bool {
 }
 
 func loadGames() -> GamesList {
-    if UserDefaults.standard.bool(forKey: "isGameDetectionEnabled") {
+    if Defaults[.isGameDetectionEnabled] {
         detectSteamGamesAndWriteToJSON()
     }
-    
     let res = loadGamesFromJSON()
     return res
 }
