@@ -8,7 +8,6 @@ import Foundation
 import SwiftUI
 import IGDB_SWIFT_API
 import AlertToast
-import Defaults
 
 struct GameInputView: View {
     @Environment(\.dismiss) private var dismiss

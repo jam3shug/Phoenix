@@ -6,15 +6,6 @@
 //
 
 import SwiftUI
-import Defaults
-
-extension Defaults.Keys {
-    static let accentColorUI = Key<Bool>("accentColorUI", default: true)
-    static let listIconsHidden = Key<Bool>("listIconsHidden", default: false)
-    static let listIconSize = Key<Double>("listIconSize", default: 24.0)
-    static let showPickerText = Key<Bool>("showPickerText", default: false)
-    static let showSortByNumber = Key<Bool>("showSortByNumber", default: true)
-}
 
 struct AppearanceSettingsView: View {
     @Default(.listIconSize) var listIconSize

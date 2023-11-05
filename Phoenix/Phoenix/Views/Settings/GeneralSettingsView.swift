@@ -6,12 +6,6 @@
 //
 
 import SwiftUI
-import Defaults
-
-extension Defaults.Keys {
-    static let isGameDetectionEnabled = Key<Bool>("isGameDetectionEnabled", default: false)
-    static let isMetaDataFetchingEnabled = Key<Bool>("isMetaDataFetchingEnabled", default: true)
-}
 
 struct GeneralSettingsView: View {
     var body: some View {

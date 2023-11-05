@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Defaults
 
 enum Platform: String, Codable, CaseIterable, Identifiable {
     case mac, steam, gog, epic, pc, ps, nin, sega, xbox, none

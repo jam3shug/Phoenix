@@ -7,7 +7,6 @@
 
 import SwiftUI
 import AlertToast
-import Defaults
 
 private let headerImageHeight: CGFloat = 500
 private let collapsedImageHeight: CGFloat = 150
@@ -18,7 +17,7 @@ struct ContentView: View {
     @Environment(\.openWindow) var openWindow
     @Binding var sortBy: PhoenixApp.SortBy
     @State var searchText: String = ""
-    @State var selectedGame: UUID = UUID()
+    @Default(.selectedGame) var selectedGame
     @State var refresh: Bool = false
     @State private var timer: Timer?
     @Binding var isAddingGame: Bool

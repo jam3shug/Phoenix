@@ -40,6 +40,7 @@
 		AD5E91A62AAE33CB008097C4 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = AD5E91A52AAE33CB008097C4 /* AlertToast */; };
 		AD92C4F62AAEBAF40058E1EA /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = AD92C4F52AAEBAF40058E1EA /* Kingfisher */; };
 		ADB63FFE2AF7F248006B39ED /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = ADB63FFD2AF7F248006B39ED /* Defaults */; };
+		ADB640002AF8391C006B39ED /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB63FFF2AF8391C006B39ED /* Defaults.swift */; };
 		ADB72D5E2AC1359100299AC0 /* ChooseGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB72D5D2AC1359100299AC0 /* ChooseGameView.swift */; };
 		ADD4C7C82AC9CCE70052DFCB /* GameMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD4C7C72AC9CCE70052DFCB /* GameMetadata.swift */; };
 		B5B66A692A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */; };
@@ -101,6 +102,7 @@
 		AD53FCBB2AC7E15D00D3A301 /* LargeToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeToggleButton.swift; sourceTree = "<group>"; };
 		AD53FCBD2AC7E39100D3A301 /* SmallToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallToggleButton.swift; sourceTree = "<group>"; };
 		AD53FCC12AC7E57200D3A301 /* Cards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cards.swift; sourceTree = "<group>"; };
+		ADB63FFF2AF8391C006B39ED /* Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		ADB72D5D2AC1359100299AC0 /* ChooseGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseGameView.swift; sourceTree = "<group>"; };
 		ADD4C7C72AC9CCE70052DFCB /* GameMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMetadata.swift; sourceTree = "<group>"; };
 		B5B66A682A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenGamesSettingsView.swift; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 		ADB4CF062AB536E200BDF853 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				ADB63FFF2AF8391C006B39ED /* Defaults.swift */,
 				AD13CDE72AA542A300C6FD61 /* FetchGameData.swift */,
 			);
 			path = Services;
@@ -489,6 +492,7 @@
 				AD5287CA2AC007CC001673F5 /* TextBox.swift in Sources */,
 				B5B66A692A3ECC1B00BD99C9 /* HiddenGamesSettingsView.swift in Sources */,
 				AD5287D62AC018B8001673F5 /* HelpButton.swift in Sources */,
+				ADB640002AF8391C006B39ED /* Defaults.swift in Sources */,
 				0AE9B6F42A3AD97100800850 /* SettingsView.swift in Sources */,
 				0A87BBB1295D57C30009AF47 /* GameListView.swift in Sources */,
 			);

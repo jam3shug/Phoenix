@@ -6,7 +6,6 @@
 //
 import SwiftUI
 import AlertToast
-import Defaults
 
 struct GameDetailView: View {
     
