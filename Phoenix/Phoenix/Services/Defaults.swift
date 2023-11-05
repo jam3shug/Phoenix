@@ -21,4 +21,5 @@ extension Defaults.Keys {
     static let listIconSize = Key<Double>("listIconSize", default: 24.0)
     static let showPickerText = Key<Bool>("showPickerText", default: false)
     static let showSortByNumber = Key<Bool>("showSortByNumber", default: true)
+    static let showAnimationOfSortByIcon = Key<Bool>("showAnimationOfSortByIcon", default: false)
 }
