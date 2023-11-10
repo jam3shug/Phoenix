@@ -6,6 +6,7 @@
 //
 import SwiftUI
 import AlertToast
+import StarRatingViewSwiftUI
 
 struct GameDetailView: View {
     
@@ -16,6 +17,8 @@ struct GameDetailView: View {
     @Binding var editingGame: Bool
     @Binding var playingGame: Bool
     @State var showSuccessToast: Bool = false
+    
+    @State var rating: Float = 3.0
     
     @State private var timer: Timer?
     
@@ -44,7 +47,8 @@ struct GameDetailView: View {
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
-                        HStack(alignment: .top) {
+                        HStack(alignment: .center) {
+                            let game = getGameFromID(id: selectedGame)
                             // play button
                             LargeToggleButton(toggle: $playingGame, symbol: "play.fill", text: "Play", textColor: Color.white, bgColor: accentColorUI ? Color.accentColor : Color.green)
                             .alert(
@@ -54,6 +58,10 @@ struct GameDetailView: View {
                             
                             // settings button
                             SmallToggleButton(toggle: $editingGame, symbol: "pencil", textColor: accentColorUI ? Color.accentColor : Color.primary, bgColor: accentColorUI ? Color.accentColor.opacity(0.25) : Color.gray.opacity(0.25))
+                            
+                            StarRatingView(rating: $rating)
+                              .frame(width: 300, height: 30)
+                              .padding()
                         } // hstack
                         .frame(alignment: .leading)
 

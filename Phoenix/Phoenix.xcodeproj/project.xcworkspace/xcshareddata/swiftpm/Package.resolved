@@ -64,6 +64,15 @@
       }
     },
     {
+      "identity" : "starratingviewswiftui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jxhug/StarRatingViewSwiftUI.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "e4caa7df4135b0952a9e15c2950752744d7ba418"
+      }
+    },
+    {
       "identity" : "swift-markdown-ui",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/gonzalezreal/swift-markdown-ui.git",
