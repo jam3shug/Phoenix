@@ -32,6 +32,7 @@ struct AppearanceSettingsView: View {
                     .frame(maxWidth: 225)
                 }
                 Defaults.Toggle("Show amount of games in sidebar", key: .showSortByNumber)
+                Defaults.Toggle("Show add game button in sidebar", key: .showSidebarAddGameButton)
                 Divider() //toolbar settings
                 Defaults.Toggle("Show animation of category picker", key: .showAnimationOfSortByIcon)
                 Defaults.Toggle("Show text in category picker", key: .showPickerText)
