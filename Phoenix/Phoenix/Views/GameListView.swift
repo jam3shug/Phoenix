@@ -19,6 +19,7 @@ struct GameListView: View {
     @Default(.showSortByNumber) var showSortByNumber
     @Default(.showSidebarAddGameButton) var showSidebarAddGameButton
     @Default(.accentColorUI) var accentColorUI
+    @Default(.gradientUI) var gradientUI
     
     var body: some View {
         VStack {
@@ -86,6 +87,7 @@ struct GameListView: View {
                     }
                 }
             }
+            
             if showSidebarAddGameButton {
                 Button(action: {
                     isAddingGame.toggle()
@@ -99,8 +101,22 @@ struct GameListView: View {
                 })
                 .buttonStyle(.plain)
                 .frame(minWidth: 200, maxWidth: .infinity, maxHeight: 35)
-                .background(accentColorUI ? Color.accentColor : Color.blue)
-                .cornerRadius(10)
+                .background(
+                    Group {
+                        if gradientUI {
+                            LinearGradient(
+                                colors: [accentColorUI ? Color.accentColor : Color.blue,
+                                         accentColorUI ? Color.accentColor.opacity(0.7) : Color.blue.opacity(0.7)],
+                                startPoint: .bottom,
+                                endPoint: .top
+                            )
+                            .cornerRadius(7.5) // Adjust the corner radius value as needed
+                        } else {
+                            (accentColorUI ? Color.accentColor : Color.blue)
+                                .cornerRadius(7.5) // Adjust the corner radius value as needed
+                        }
+                    }
+                )
                 .padding()
             }
         }
