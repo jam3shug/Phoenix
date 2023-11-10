@@ -14,7 +14,7 @@ struct AppearanceSettingsView: View {
         Form {
             VStack(alignment: .leading, spacing: 15) {
                 //detail settings
-                Defaults.Toggle("Adaptive Color UI", key: .accentColorUI)
+                Defaults.Toggle("Accent color UI", key: .accentColorUI)
                 Defaults.Toggle("Gradient UI", key: .gradientUI)
                 Divider() //sidebar settings
                 Defaults.Toggle("Hide icons in sidebar", key: .listIconsHidden)
