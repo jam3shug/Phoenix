@@ -106,7 +106,7 @@ struct GameListView: View {
                         if gradientUI {
                             LinearGradient(
                                 colors: [accentColorUI ? Color.accentColor : Color.blue,
-                                         accentColorUI ? Color.accentColor.opacity(0.7) : Color.blue.opacity(0.7)],
+                                         accentColorUI ? Color.accentColor.opacity(0.6) : Color.blue.opacity(0.6)],
                                 startPoint: .bottom,
                                 endPoint: .top
                             )

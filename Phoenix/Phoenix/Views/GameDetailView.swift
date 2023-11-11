@@ -61,7 +61,7 @@ struct GameDetailView: View {
                             if showStarRating {
                                 StarRatingView(rating: $rating, color: accentColorUI ? Color.accentColor : Color.orange)
                                   .frame(width: 300, height: 30)
-                                  .padding()
+                                  .padding(.horizontal, 7.5)
                             }
                         } // hstack
                         .frame(alignment: .leading)

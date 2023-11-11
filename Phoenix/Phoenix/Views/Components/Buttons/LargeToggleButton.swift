@@ -38,7 +38,7 @@ struct LargeToggleButton: View {
                 if gradientUI {
                     LinearGradient(
                         colors: [bgColor,
-                                 bgColor.opacity(0.7)],
+                                 bgColor.opacity(0.6)],
                         startPoint: .bottom,
                         endPoint: .top
                     )

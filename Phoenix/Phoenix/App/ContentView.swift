@@ -52,16 +52,6 @@ struct ContentView: View {
                                     Label("New Game", systemImage: "plus")
                                 }
                             )
-                            .sheet(
-                                isPresented: $isAddingGame,
-                                onDismiss: {
-                                    // Refresh game list
-                                    self.refresh.toggle()
-                                },
-                                content: {
-                                    GameInputView(isNewGame: true, selectedGame: $selectedGame, showSuccessToast: $showSuccessToast, successToastText: $successToastText, showFailureToast: $showFailureToast, failureToastText: $failureToastText)
-                                }
-                            )
                         }
                     }
                     ToolbarItem(placement: .primaryAction) {
@@ -108,6 +98,16 @@ struct ContentView: View {
         } detail: {
             // The detailed view of the selected game
             GameDetailView(selectedGame: $selectedGame, refresh: $refresh, editingGame: $isEditingGame, playingGame: $isPlayingGame)
+                .sheet(
+                    isPresented: $isAddingGame,
+                    onDismiss: {
+                        // Refresh game list
+                        self.refresh.toggle()
+                    },
+                    content: {
+                        GameInputView(isNewGame: true, selectedGame: $selectedGame, showSuccessToast: $showSuccessToast, successToastText: $successToastText, showFailureToast: $showFailureToast, failureToastText: $failureToastText)
+                    }
+                )
                 .sheet(isPresented: $isEditingGame, content: {
                     GameInputView(isNewGame: false, selectedGame: $selectedGame, showSuccessToast: $showSuccessToast, successToastText: $successToastText, showFailureToast: $showFailureToast, failureToastText: $failureToastText)
                 })
